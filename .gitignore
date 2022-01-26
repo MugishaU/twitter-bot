@@ -1,3 +1,4 @@
 .DS_STORE
-/credentials
+credentials
 node_modules
+.env
