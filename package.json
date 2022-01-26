@@ -1,22 +1,24 @@
 {
-  "name": "twitter-bot",
-  "version": "1.0.0",
-  "description": "A bot that will retweet tweets that meet specific criteria using the [Twitter API](https://developer.twitter.com/en/docs/twitter-api).",
-  "main": "index.js",
-  "scripts": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MugishaU/twitter-bot.git"
-  },
-  "author": "MugishaU",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/MugishaU/twitter-bot/issues"
-  },
-  "homepage": "https://github.com/MugishaU/twitter-bot#readme",
-  "dependencies": {
-    "dotenv": "^14.3.2"
-  }
+	"name": "twitter-bot",
+	"version": "1.0.0",
+	"description": "A bot that will retweet tweets that meet specific criteria using the [Twitter API](https://developer.twitter.com/en/docs/twitter-api).",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"test": "test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MugishaU/twitter-bot.git"
+	},
+	"author": "MugishaU",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/MugishaU/twitter-bot/issues"
+	},
+	"homepage": "https://github.com/MugishaU/twitter-bot#readme",
+	"dependencies": {
+		"axios": "^0.25.0",
+		"dotenv": "^14.3.2"
+	}
 }
