@@ -1,9 +1,11 @@
 require("dotenv").config()
 const axios = require("axios").default
 
-const fetch = (searchTerm) => {
+const fetch = (searchTerm, next_token = null, results = []) => {
 	const bearerToken = process.env.TWITTER_BEARER_TOKEN
-	const url = `https://api.twitter.com/2/tweets/search/recent?query=${searchTerm}`
+	const URL = `https://api.twitter.com/2/tweets/search/recent?query=${searchTerm}`
+	const nextTokenQuery = next_token ? `&next_token=${next_token}` : ""
+	const fullURL = URL + nextTokenQuery
 	const options = {
 		headers: {
 			Authorization: `BEARER ${bearerToken}`,
@@ -11,7 +13,7 @@ const fetch = (searchTerm) => {
 	}
 
 	const response = axios
-		.get(url, options)
+		.get(fullURL, options)
 		.then((response) => {
 			console.log(response.data)
 		})
