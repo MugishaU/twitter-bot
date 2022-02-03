@@ -16,11 +16,9 @@ const fetch = (searchTerm, next_token = null, tweets = [], index = 1) => {
 		.get(fullURL, options)
 		.then((response) => {
 			const apiResults = tweets
-
+			apiResults.push(response.data.data)
 			//count is to protect the API, a maximum of 50 tweets are collected.
 			const count = index + 1
-
-			apiResults.push(response.data.data)
 
 			if (response.data.meta.next_token && index < 5) {
 				fetch(searchTerm, response.data.meta.next_token, apiResults, count)
