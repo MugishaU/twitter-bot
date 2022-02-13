@@ -35,4 +35,9 @@ const fetch = async (searchTerm, nextToken = null, tweets = [], index = 1) => {
 	}
 }
 
+const retweet = (id) => {
+	console.log(id)
+}
+
 exports.fetch = fetch
+exports.retweet = retweet
