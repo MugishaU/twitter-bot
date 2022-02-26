@@ -26,9 +26,9 @@ exports.handler = async (event, context) => {
 			default:
 				throw new Error(`Unsupported route: "${event.routeKey}"`)
 		}
-	} catch (err) {
+	} catch (error) {
 		statusCode = 400
-		body = "error"
+		body = error.message ? error.message : "error"
 	} finally {
 		body = JSON.stringify(body)
 	}
