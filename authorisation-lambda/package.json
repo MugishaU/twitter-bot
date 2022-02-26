@@ -1,0 +1,24 @@
+{
+	"name": "authorisation",
+	"version": "1.0.0",
+	"description": "A lambda that will enable the twitter [Oauth 2.0 PKCE flow](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens).",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"test": "test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MugishaU/twitter-bot.git"
+	},
+	"author": "MugishaU",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/MugishaU/twitter-bot/issues"
+	},
+	"homepage": "https://github.com/MugishaU/twitter-bot#readme",
+	"dependencies": {
+		"axios": "^0.25.0",
+		"dotenv": "^14.3.2"
+	}
+}
