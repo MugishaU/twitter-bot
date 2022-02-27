@@ -23,5 +23,3 @@ do
     exit 1
   fi
 done
-
-rm ${ZIP_NAME}.zip
