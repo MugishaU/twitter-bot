@@ -3,7 +3,9 @@
 FUNCTION_NAME=$1
 ZIP_NAME=$2
 
-zip -r ${ZIP_NAME}.zip . -x ".*" -x "package*"
+rm ${ZIP_NAME}.zip
+
+zip -r ${ZIP_NAME}.zip . -x ".*" -x "package*" -x "credentials/*"
 
 aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip
 
