@@ -3,7 +3,6 @@ resource "aws_apigatewayv2_api" "twitter-auth-api-gateway-terraform" {
   protocol_type = "HTTP"
 }
 
-
 resource "aws_apigatewayv2_stage" "twitter-auth-api-gateway-stage" {
   api_id      = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
   name        = "$default"
