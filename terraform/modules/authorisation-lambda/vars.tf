@@ -1,5 +1,5 @@
-variable "authorisation_lambda_function_name" {
+variable "auth-lambda-name" {
   description = "authorisation lambda function name"
   type        = string
-  default     = "twitter_authorisation_lambda"
+  default     = "twitter-auth-lambda"
 }
