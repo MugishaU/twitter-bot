@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
-		"test": "test"
+		"test": "test",
+		"lambda": "sh ../update-lambda.sh twitter-auth-lambda authorisation-lambda"
 	},
 	"repository": {
 		"type": "git",
