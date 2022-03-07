@@ -53,3 +53,22 @@ data "aws_iam_policy_document" "cloudwatch-policy-document" {
     ]
   }
 }
+
+resource "aws_iam_group" "twitter-auth-api-gateway" {
+  name = "TwitterAuthAPIGateway"
+}
+
+resource "aws_iam_group_policy" "twitter-auth-api-gateway-policy" {
+  name   = "twitter-auth-api-gateway-policy"
+  group  = aws_iam_group.twitter-auth-api-gateway.name
+  policy = data.aws_iam_policy_document.twitter-auth-api-gateway-policy-document.json
+}
+
+data "aws_iam_policy_document" "twitter-auth-api-gateway-policy-document" {
+  statement {
+    sid       = "InvokeAPIGateway"
+    effect    = "Allow"
+    actions   = ["execute-api:Invoke"]
+    resources = ["${aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.execution_arn}/*"]
+  }
+}
