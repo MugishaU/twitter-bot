@@ -19,25 +19,29 @@ resource "aws_apigatewayv2_integration" "twitter-auth-api-gateway-lambda-integra
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-authorise-route" {
-  api_id    = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
-  route_key = "GET /authorise"
-  target    = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
+  route_key          = "GET /authorise"
+  target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-callback-route" {
-  api_id    = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
-  route_key = "POST /callback"
-  target    = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
+  route_key          = "POST /callback"
+  target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-token-route" {
-  api_id    = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
-  route_key = "POST /token"
-  target    = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
+  route_key          = "POST /token"
+  target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-refresh-route" {
-  api_id    = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
-  route_key = "POST /refresh"
-  target    = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.id
+  route_key          = "POST /refresh"
+  target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
+  authorization_type = "AWS_IAM"
 }
