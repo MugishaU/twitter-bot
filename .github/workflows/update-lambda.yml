@@ -101,6 +101,10 @@ jobs:
         shell: bash
         working-directory: authorisation-lambda
     steps:
+      - name: Check Branch Status
+        if: github.ref != 'refs/heads/main' || github.event_name != 'push'
+        run: exit 0
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
@@ -136,6 +140,10 @@ jobs:
         working-directory: terraform
 
     steps:
+      - name: Check Branch
+        if: github.ref != 'refs/heads/main' || github.event_name != 'push'
+        run: exit 0
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
