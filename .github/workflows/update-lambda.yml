@@ -92,6 +92,7 @@ jobs:
 
   lambda:
     needs: terraform
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     name: "Update Lambda"
     runs-on: ubuntu-latest
     environment: production
@@ -103,10 +104,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
-      - name: Check Branch Status
-        if: github.ref != 'refs/heads/main' || github.event_name != 'push'
-        run: exit 0
 
       - name: Install Node
         uses: actions/setup-node@v2
@@ -130,6 +127,7 @@ jobs:
 
   refresh:
     needs: lambda
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     name: "Refresh Terraform State"
     runs-on: ubuntu-latest
     environment: production
@@ -142,10 +140,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
-      - name: Check Branch
-        if: github.ref != 'refs/heads/main' || github.event_name != 'push'
-        run: exit 0
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
