@@ -96,8 +96,8 @@ jobs:
         run: terraform apply -refresh-only -auto-approve
 
   lambda:
-    name: "Update Lambda"
     needs: terraform
+    name: "Update Lambda"
     runs-on: ubuntu-latest
     environment: production
 
@@ -115,23 +115,23 @@ jobs:
           node-version: "14"
           cache: "npm"
 
-    - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-2
+      - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: eu-west-2
     
-    - name: Update "twitter-auth-lambda" Function Code
-        if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
-        run: |
-          npm install
-          bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
-        shell: bash
+      - name: Update "twitter-auth-lambda" Function Code
+          if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
+          run: |
+            npm install
+            bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
+          shell: bash
 
   refresh:
+    needs: lambda
     name: "Refresh Terraform State"
-    needs: terraform, lambda
     runs-on: ubuntu-latest
     environment: production
 
