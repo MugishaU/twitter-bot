@@ -21,6 +21,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -99,6 +103,7 @@ jobs:
         if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
         run: |
           cd ../authorisation-lambda
+          npm install
           bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
         shell: bash
 
