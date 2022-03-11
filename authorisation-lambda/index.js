@@ -10,7 +10,7 @@ exports.handler = async (event, context) => {
 			case "GET /authorise":
 				console.log("/authorise called.")
 				statusCode = 200
-				body = "authorise"
+				body = "authorise test"
 				break
 			case "POST /callback":
 				console.log("/callback called.")
