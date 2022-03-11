@@ -95,9 +95,11 @@ jobs:
         run: ls
         shell: bash
 
-      - name: Update twitter-auth-lambda Code
+      - name: Update "twitter-auth-lambda" Function Code
         if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
-        run: bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
+        run: |
+          cd ../authorisation-lambda
+          bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
         shell: bash
 
       - name: Terraform Refresh
