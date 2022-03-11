@@ -89,3 +89,12 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+
+      - name: Update twitter-auth-lambda Code
+        if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
+        run: update-lambda.sh twitter-auth-lambda authorisation-lambda
+        shell: bash
+
+      - name: Terraform Refresh
+        if: github.ref == 'refs/heads/github-actions' && github.event_name == 'push'
+        run: terraform apply -refresh-only -auto-approve
