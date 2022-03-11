@@ -101,12 +101,12 @@ jobs:
         shell: bash
         working-directory: authorisation-lambda
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Check Branch Status
         if: github.ref != 'refs/heads/main' || github.event_name != 'push'
         run: exit 0
-
-      - name: Checkout Code
-        uses: actions/checkout@v2
 
       - name: Install Node
         uses: actions/setup-node@v2
@@ -140,12 +140,12 @@ jobs:
         working-directory: terraform
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Check Branch
         if: github.ref != 'refs/heads/main' || github.event_name != 'push'
         run: exit 0
-
-      - name: Checkout Code
-        uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
