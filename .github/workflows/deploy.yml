@@ -1,4 +1,4 @@
-name: "Update Lambda"
+name: "Production Deployment"
 
 on:
   push:
