@@ -1,6 +1,6 @@
 # twitter-bot
 
-[![Update Lambda](https://github.com/MugishaU/twitter-bot/actions/workflows/update-lambda.yml/badge.svg?branch=main)](https://github.com/MugishaU/twitter-bot/actions/workflows/update-lambda.yml)
+[![Production Deployment](https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml)
 
 A bot that will retweet tweets that meet specific criteria using the [Twitter API](https://developer.twitter.com/en/docs/twitter-api).
 
