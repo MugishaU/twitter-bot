@@ -19,6 +19,7 @@
 	},
 	"homepage": "https://github.com/MugishaU/twitter-bot#readme",
 	"dependencies": {
+		"aws-sdk": "^2.1092.0",
 		"axios": "^0.25.0",
 		"dotenv": "^14.3.2"
 	}
