@@ -18,6 +18,8 @@
 	},
 	"homepage": "https://github.com/MugishaU/twitter-bot#readme",
 	"dependencies": {
+		"@aws-sdk/client-dynamodb": "^3.54.1",
+		"@aws-sdk/util-dynamodb": "^3.54.1",
 		"axios": "^0.25.0",
 		"dotenv": "^14.3.2"
 	}
