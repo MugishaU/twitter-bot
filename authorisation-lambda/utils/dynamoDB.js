@@ -1,4 +1,8 @@
-const { GetItemCommand, DynamoDBClient } = require("@aws-sdk/client-dynamodb")
+const {
+	DynamoDBClient,
+	GetItemCommand,
+	PutItemCommand,
+} = require("@aws-sdk/client-dynamodb")
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb")
 
 const ddbClient = new DynamoDBClient()
@@ -27,4 +31,33 @@ const getItem = async (tableName, primaryKey) => {
 	}
 }
 
-exports.get = getItem
+const putItem = async (tableName, item) => {
+	const unixTimestampNow = Math.floor(new Date().getTime() / 1000)
+	const sevenDaysInSeconds = 604800
+	const ttl = unixTimestampNow + sevenDaysInSeconds
+	item.ttl = ttl
+
+	const params = {
+		TableName: tableName,
+		Item: marshall(item),
+	}
+
+	try {
+		const data = await ddbClient.send(new PutItemCommand(params))
+		const response = {
+			statusCode: data.$metadata.httpStatusCode,
+		}
+		return response
+	} catch (error) {
+		const errorResponse = {
+			statusCode: error.$metadata.httpStatusCode,
+			body: error.message,
+		}
+
+		console.log(errorResponse)
+		return errorResponse
+	}
+}
+
+exports.getItem = getItem
+exports.putItem = putItem
