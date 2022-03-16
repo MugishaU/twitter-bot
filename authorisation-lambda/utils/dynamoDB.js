@@ -31,11 +31,13 @@ const getItem = async (tableName, primaryKey) => {
 	}
 }
 
-const putItem = async (tableName, item) => {
-	const unixTimestampNow = Math.floor(new Date().getTime() / 1000)
-	const sevenDaysInSeconds = 604800
-	const ttl = unixTimestampNow + sevenDaysInSeconds
-	item.ttl = ttl
+const putItem = async (tableName, item, ttl = true) => {
+	if (ttl) {
+		const unixTimestampNow = Math.floor(new Date().getTime() / 1000)
+		const sevenDaysInSeconds = 604800
+		const ttl = unixTimestampNow + sevenDaysInSeconds
+		item.ttl = ttl
+	}
 
 	const params = {
 		TableName: tableName,
