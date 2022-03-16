@@ -1,26 +1,30 @@
-const AWS = require("aws-sdk")
+const { GetItemCommand, DynamoDBClient } = require("@aws-sdk/client-dynamodb")
+const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb")
 
-const docClient = new AWS.DynamoDB.DocumentClient()
+const ddbClient = new DynamoDBClient()
 
-const get = (tableName, primaryKey) => {
+const getItem = async (tableName, primaryKey) => {
 	const params = {
 		TableName: tableName,
-		Key: primaryKey,
+		Key: marshall(primaryKey),
 	}
 
-	docClient.get(params, function (err, data) {
-		if (err) {
-			console.error("Unable to query. Error:", JSON.stringify(err, null, 2))
-		} else {
-			console.log("Query succeeded.")
-
-			const result = true ? data.Item : null
-			console.log(result)
-			return data.Item
+	try {
+		const data = await ddbClient.send(new GetItemCommand(params))
+		const response = {
+			statusCode: data.$metadata.httpStatusCode,
+			body: data.Item ? unmarshall(data.Item) : undefined,
 		}
-	})
-}
-const v = get("twitter-auth", { id: "1" })
-get("twitter-auth", { id: "1" })
+		return response
+	} catch (error) {
+		const errorResponse = {
+			statusCode: error.$metadata.httpStatusCode,
+			body: error.message,
+		}
 
-exports.get = get
+		console.error(errorResponse)
+		return errorResponse
+	}
+}
+
+exports.get = getItem
