@@ -23,7 +23,9 @@ provider "aws" {
 }
 
 module "authorisation-lambda" {
-  source = "./modules/authorisation-lambda"
+  source            = "./modules/authorisation-lambda"
+  AWS_ACCESS_KEY_ID = var.AWS_ACCESS_KEY_ID
+  AWS_SECRET_KEY    = var.AWS_SECRET_KEY
 }
 
 module "dynamoDB" {
