@@ -1,3 +1,12 @@
+data "aws_ssm_parameter" "aws-access-key-id" {
+  name = "/twitter-bot/auth/aws-access-key-id"
+}
+
+data "aws_ssm_parameter" "aws-secret-access-key" {
+  name = "/twitter-bot/auth/aws-secret-access-key"
+}
+
+
 resource "aws_lambda_function" "twitter-authorisation-lambda" {
   filename      = "../authorisation-lambda/authorisation-lambda.zip"
   function_name = var.auth-lambda-name
@@ -8,9 +17,9 @@ resource "aws_lambda_function" "twitter-authorisation-lambda" {
 
   environment {
     variables = {
-      AWS_ACCESS_KEY_ID = var.AWS_ACCESS_KEY_ID
-      AWS_SECRET_KEY    = var.AWS_SECRET_KEY
-      AWS_REGION        = var.AWS_REGION
+      AWS_ACCESS_KEY_ID     = data.aws_ssm_parameter.aws-access-key-id.value
+      AWS_SECRET_ACCESS_KEY = data.aws_ssm_parameter.aws-secret-access-key.value
+      AWS_REGION            = "eu-west-2"
     }
   }
 }
