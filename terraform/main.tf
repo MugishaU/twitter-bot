@@ -25,3 +25,7 @@ provider "aws" {
 module "authorisation-lambda" {
   source = "./modules/authorisation-lambda"
 }
+
+module "dynamoDB" {
+  source = "./modules/dynamoDB"
+}
