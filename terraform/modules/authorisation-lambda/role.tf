@@ -54,11 +54,11 @@ data "aws_iam_policy_document" "cloudwatch-policy-document" {
   }
 }
 
-resource "aws_iam_policy_attachment" "twitter-auth-api-gateway-policy-attachment" {
-  name       = "twitter-auth-api-gateway"
-  roles      = []
-  policy_arn = aws_iam_policy.twitter-auth-api-gateway-policy.arn
-}
+# resource "aws_iam_policy_attachment" "twitter-auth-api-gateway-policy-attachment" {
+#   name       = "twitter-auth-api-gateway"
+#   roles      = []
+#   policy_arn = aws_iam_policy.twitter-auth-api-gateway-policy.arn
+# }
 
 resource "aws_iam_policy" "twitter-auth-api-gateway-policy" {
   name   = "twitter-auth-api-gateway-policy"
