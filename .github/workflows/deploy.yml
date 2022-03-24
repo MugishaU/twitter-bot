@@ -99,7 +99,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: authorisation-lambda
+        working-directory: src/authorisation-lambda
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -109,7 +109,7 @@ jobs:
         with:
           node-version: "14"
           cache: "npm"
-          cache-dependency-path: authorisation-lambda/package-lock.json
+          cache-dependency-path: src/authorisation-lambda/package-lock.json
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -121,7 +121,7 @@ jobs:
       - name: Update "twitter-auth-lambda" Function Code
         run: |
           npm install
-          bash ../update-lambda.sh twitter-auth-lambda authorisation-lambda
+          bash ../../scripts/update-lambda.sh twitter-auth-lambda authorisation-lambda
         shell: bash
 
   refresh:
