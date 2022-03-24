@@ -121,7 +121,7 @@ jobs:
       - name: Update "twitter-auth-lambda" Function Code
         run: |
           npm install
-          bash ../../scripts/update-lambda.sh twitter-auth-lambda authorisation-lambda
+          npm run deploy-lambda
         shell: bash
 
   refresh:
