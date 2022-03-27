@@ -5,7 +5,10 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
-		"test": "test"
+		"test": "test",
+		"compile": "tsc",
+		"compileNe": "tsc --noEmit",
+		"compileWatch": "tsc -b -v -i -w"
 	},
 	"repository": {
 		"type": "git",
