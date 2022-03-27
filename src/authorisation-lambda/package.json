@@ -6,6 +6,9 @@
 	"scripts": {
 		"start": "node index.js",
 		"test": "test",
+		"compile": "tsc",
+		"compileNe": "tsc --noEmit",
+		"compileWatch": "tsc -b -v -i -w",
 		"deploy-lambda": "sh ../../scripts/update-lambda.sh twitter-auth-lambda authorisation-lambda"
 	},
 	"repository": {
@@ -21,7 +24,13 @@
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.54.1",
 		"@aws-sdk/util-dynamodb": "^3.54.1",
+		"@types/aws-lambda": "^8.10.93",
 		"axios": "^0.25.0",
 		"dotenv": "^14.3.2"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.23",
+		"ts-node": "^10.7.0",
+		"typescript": "^4.6.3"
 	}
 }
