@@ -5,6 +5,10 @@ node_modules
 .vscode/
 *.zip
 
+.out/
+# TS -incremental file
+tsconfig.tsbuildinfo
+
 
    
 # Local .terraform directories
