@@ -6,7 +6,9 @@
 	"scripts": {
 		"start": "node index.js",
 		"test": "test",
-		"compile": "tsc -b -v -i -w",
+		"compile": "tsc",
+		"compileNe": "tsc --noEmit",
+		"compileWatch": "tsc -b -v -i -w",
 		"deploy-lambda": "sh ../../scripts/update-lambda.sh twitter-auth-lambda authorisation-lambda"
 	},
 	"repository": {
