@@ -1,6 +1,10 @@
-exports.handler = async (event, context) => {
-	let statusCode
-	let body
+import { APIGatewayProxyEventV2, APIGatewayProxyResult } from "aws-lambda"
+
+export const handler = async (
+	event: APIGatewayProxyEventV2
+): Promise<APIGatewayProxyResult> => {
+	let statusCode: number
+	let body: string = ""
 	const headers = {
 		"Content-Type": "application/json",
 	}
