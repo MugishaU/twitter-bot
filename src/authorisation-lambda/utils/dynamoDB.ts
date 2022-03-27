@@ -1,28 +1,51 @@
-const {
+import {
 	DynamoDBClient,
 	GetItemCommand,
+	GetItemCommandOutput,
 	PutItemCommand,
-} = require("@aws-sdk/client-dynamodb")
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb")
+} from "@aws-sdk/client-dynamodb"
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
+import { returnElseDefault } from "./helpers"
 
-const ddbClient = new DynamoDBClient()
+interface DynamoDbPrimaryKey {
+	id: string
+}
 
-const getItem = async (tableName, primaryKey) => {
+interface DynamoDbItem {
+	[key: string]: string | number | boolean
+}
+
+interface DynamoDbResult {
+	statusCode: number
+	body?: { [key: string]: string | number | boolean }
+}
+
+const ddbClient = new DynamoDBClient({})
+
+export const getItem = async (
+	tableName: string,
+	primaryKey: DynamoDbPrimaryKey
+): Promise<DynamoDbResult> => {
 	const params = {
 		TableName: tableName,
 		Key: marshall(primaryKey),
 	}
 
 	try {
-		const data = await ddbClient.send(new GetItemCommand(params))
-		const response = {
-			statusCode: data.$metadata.httpStatusCode,
+		const data: GetItemCommandOutput = await ddbClient.send(
+			new GetItemCommand(params)
+		)
+		const response: DynamoDbResult = {
+			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
 			body: data.Item ? unmarshall(data.Item) : undefined,
 		}
 		return response
 	} catch (error) {
-		const errorResponse = {
-			statusCode: error.$metadata.httpStatusCode,
+		const errorResponse: DynamoDbResult = {
+			statusCode: returnElseDefault<number>(
+				error.$metadata.httpStatusCode,
+				500
+			),
 			body: error.message,
 		}
 
@@ -31,7 +54,11 @@ const getItem = async (tableName, primaryKey) => {
 	}
 }
 
-const putItem = async (tableName, item, ttl = true) => {
+export const putItem = async (
+	tableName: string,
+	item: DynamoDbItem,
+	ttl = true
+): Promise<DynamoDbResult> => {
 	if (ttl) {
 		const unixTimestampNow = Math.floor(new Date().getTime() / 1000)
 		const sevenDaysInSeconds = 604800
@@ -45,14 +72,19 @@ const putItem = async (tableName, item, ttl = true) => {
 	}
 
 	try {
-		const data = await ddbClient.send(new PutItemCommand(params))
-		const response = {
-			statusCode: data.$metadata.httpStatusCode,
+		const data: GetItemCommandOutput = await ddbClient.send(
+			new PutItemCommand(params)
+		)
+		const response: DynamoDbResult = {
+			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
 		}
 		return response
 	} catch (error) {
-		const errorResponse = {
-			statusCode: error.$metadata.httpStatusCode,
+		const errorResponse: DynamoDbResult = {
+			statusCode: returnElseDefault<number>(
+				error.$metadata.httpStatusCode,
+				500
+			),
 			body: error.message,
 		}
 
@@ -60,6 +92,3 @@ const putItem = async (tableName, item, ttl = true) => {
 		return errorResponse
 	}
 }
-
-exports.getItem = getItem
-exports.putItem = putItem
