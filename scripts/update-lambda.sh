@@ -15,9 +15,11 @@ else
   exit 1
 fi
 
+cp -r node_modules .out
+
 cd .out
 
-zip -r ${ZIP_NAME}.zip . -x ".*" -x "package*" -x "credentials/*"
+zip -r ${ZIP_NAME}.zip .
 
 aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip
 
