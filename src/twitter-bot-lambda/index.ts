@@ -1,4 +1,4 @@
-const twitter = require("./utils/twitter")
+import { fetchTweets } from "./utils/twitter"
 
 const queries = [
 	"%23BlackInTech apply now -is:retweet",
@@ -6,6 +6,6 @@ const queries = [
 	"%23BlackWomenInTech apply now -is:retweet",
 ]
 
-for (query of queries) {
-	twitter.fetch(query)
+for (let query of queries) {
+	fetchTweets(query)
 }
