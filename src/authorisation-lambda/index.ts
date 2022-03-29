@@ -38,7 +38,7 @@ export const handler = async (
 		}
 	} catch (error) {
 		statusCode = 400
-		body = error.message ? error.message : "error"
+		body = error.message || "Undefined Error"
 		console.error(body)
 	} finally {
 		body = JSON.stringify(body)

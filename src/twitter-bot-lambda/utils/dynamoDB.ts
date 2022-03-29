@@ -5,7 +5,6 @@ import {
 	PutItemCommand,
 } from "@aws-sdk/client-dynamodb"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
-import { returnElseDefault } from "./helpers"
 
 interface DynamoDbPrimaryKey {
 	id: string
@@ -36,16 +35,13 @@ export const getItem = async (
 			new GetItemCommand(params)
 		)
 		const response: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
+			statusCode: data.$metadata.httpStatusCode || 500,
 			body: data.Item ? unmarshall(data.Item) : undefined,
 		}
 		return response
 	} catch (error) {
 		const errorResponse: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(
-				error.$metadata.httpStatusCode,
-				500
-			),
+			statusCode: error.$metadata.httpStatusCode || 500,
 			body: error.message,
 		}
 
@@ -76,15 +72,12 @@ export const putItem = async (
 			new PutItemCommand(params)
 		)
 		const response: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
+			statusCode: data.$metadata.httpStatusCode || 500,
 		}
 		return response
 	} catch (error) {
 		const errorResponse: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(
-				error.$metadata.httpStatusCode,
-				500
-			),
+			statusCode: error.$metadata.httpStatusCode || 500,
 			body: error.message,
 		}
 

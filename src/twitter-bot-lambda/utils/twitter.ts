@@ -1,6 +1,5 @@
 import "dotenv/config"
 import axios, { AxiosResponse } from "axios"
-import { returnElseDefault } from "./helpers"
 
 interface Tweet {
 	id: string
@@ -19,10 +18,8 @@ export const fetchTweets = async (
 	nextToken?: string,
 	index: number = 0
 ): Promise<TweetFetchResponse> => {
-	const bearerToken: string = returnElseDefault<string>(
-		process.env.TWITTER_BEARER_TOKEN,
-		"Not Found"
-	)
+	const bearerToken: string = process.env.TWITTER_BEARER_TOKEN || "Not Found"
+
 	const searchUrl = `https://api.twitter.com/2/tweets/search/recent?query=${searchTerm}`
 	const nextTokenQuery = nextToken ? `&next_token=${nextToken}` : ""
 	const urlWithNextToken = searchUrl + nextTokenQuery
@@ -64,8 +61,8 @@ export const fetchTweets = async (
 		}
 	} catch (error) {
 		response = {
-			statusCode: returnElseDefault<number>(error.code, error.response.status),
-			message: error.message,
+			statusCode: error.code || error.response.status || 500,
+			message: error.message || "Undefined Error",
 		}
 		console.log(response)
 	} finally {
