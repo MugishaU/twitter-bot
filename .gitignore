@@ -8,6 +8,7 @@ node_modules
 .out/
 # TS -incremental file
 tsconfig.tsbuildinfo
+.coverage
 
 
    
