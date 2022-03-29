@@ -8,7 +8,34 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: src/authorisation-lambda
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+          cache-dependency-path: src/authorisation-lambda/package-lock.json
+
+      - name: Run Unit Tests
+        run: |
+          npm install
+          npm test
+        shell: bash
+
   terraform:
+    needs: test
     name: "Terraform"
     runs-on: ubuntu-latest
     environment: production
