@@ -59,7 +59,7 @@ describe("getItem", () => {
 		expect(item).toStrictEqual({ statusCode: 200, body: undefined })
 	})
 
-	it("should return an error correctly", async () => {
+	it("should return a defined error correctly", async () => {
 		ddbMock
 			.on(GetItemCommand, {
 				TableName: "test-table",
@@ -77,6 +77,26 @@ describe("getItem", () => {
 		expect(item).toStrictEqual({
 			statusCode: 400,
 			errorMessage: "Requested resource not found"
+		})
+	})
+
+	it("should return an undefined error correctly", async () => {
+		ddbMock
+			.on(GetItemCommand, {
+				TableName: "test-table",
+				Key: {
+					id: {
+						S: "0"
+					}
+				}
+			})
+			.rejects({
+				$metadata: {}
+			})
+		const item = await getItem("test-table", { id: "0" })
+		expect(item).toStrictEqual({
+			statusCode: 500,
+			errorMessage: "Undefined Error"
 		})
 	})
 })
