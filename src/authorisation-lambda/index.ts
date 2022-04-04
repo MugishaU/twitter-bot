@@ -6,7 +6,7 @@ export const handler = async (
 	let statusCode: number
 	let body: string = ""
 	const headers = {
-		"Content-Type": "application/json",
+		"Content-Type": "application/json"
 	}
 
 	try {
@@ -47,6 +47,6 @@ export const handler = async (
 	return {
 		headers,
 		statusCode,
-		body,
+		body
 	}
 }

@@ -25,13 +25,13 @@ export const fetchTweets = async (
 	const urlWithNextToken = searchUrl + nextTokenQuery
 	const options = {
 		headers: {
-			Authorization: `BEARER ${bearerToken}`,
-		},
+			Authorization: `BEARER ${bearerToken}`
+		}
 	}
 
 	let response: TweetFetchResponse = {
 		statusCode: 500,
-		message: "fetchTweets failed to run.",
+		message: "fetchTweets failed to run."
 	}
 
 	try {
@@ -56,13 +56,13 @@ export const fetchTweets = async (
 			response = {
 				statusCode: 200,
 				message: "Tweets fetched successfully.",
-				tweets: tweets.flat(),
+				tweets: tweets.flat()
 			}
 		}
 	} catch (error) {
 		response = {
 			statusCode: error.code || error.response.status || 500,
-			message: error.message || "Undefined Error",
+			message: error.message || "Undefined Error"
 		}
 		console.log(response)
 	} finally {
