@@ -2,7 +2,7 @@ import {
 	DynamoDBClient,
 	GetItemCommand,
 	GetItemCommandOutput,
-	PutItemCommand,
+	PutItemCommand
 } from "@aws-sdk/client-dynamodb"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
 
@@ -28,7 +28,7 @@ export const getItem = async (
 ): Promise<DynamoDbResult> => {
 	const params = {
 		TableName: tableName,
-		Key: marshall(primaryKey),
+		Key: marshall(primaryKey)
 	}
 
 	try {
@@ -37,13 +37,13 @@ export const getItem = async (
 		)
 		const response: DynamoDbResult = {
 			statusCode: data.$metadata.httpStatusCode || 500,
-			body: data.Item ? unmarshall(data.Item) : undefined,
+			body: data.Item ? unmarshall(data.Item) : undefined
 		}
 		return response
 	} catch (error) {
 		const errorResponse: DynamoDbResult = {
 			statusCode: error.$metadata.httpStatusCode || 500,
-			errorMessage: error.message || "Undefined Error",
+			errorMessage: error.message || "Undefined Error"
 		}
 
 		console.error(errorResponse)
@@ -65,7 +65,7 @@ export const putItem = async (
 
 	const params = {
 		TableName: tableName,
-		Item: marshall(item),
+		Item: marshall(item)
 	}
 
 	try {
@@ -73,13 +73,13 @@ export const putItem = async (
 			new PutItemCommand(params)
 		)
 		const response: DynamoDbResult = {
-			statusCode: data.$metadata.httpStatusCode || 500,
+			statusCode: data.$metadata.httpStatusCode || 500
 		}
 		return response
 	} catch (error) {
 		const errorResponse: DynamoDbResult = {
 			statusCode: error.$metadata.httpStatusCode || 500,
-			errorMessage: error.message || "Undefined Error",
+			errorMessage: error.message || "Undefined Error"
 		}
 
 		console.log(errorResponse)
