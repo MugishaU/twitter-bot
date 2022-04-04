@@ -4,7 +4,6 @@
 	"description": "A bot that will retweet tweets that meet specific criteria using the [Twitter API](https://developer.twitter.com/en/docs/twitter-api).",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js",
 		"test": "jest",
 		"compile": "tsc",
 		"compileNe": "tsc --noEmit",

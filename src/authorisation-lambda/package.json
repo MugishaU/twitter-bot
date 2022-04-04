@@ -4,7 +4,6 @@
 	"description": "A lambda that will enable the twitter [Oauth 2.0 PKCE flow](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens).",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js",
 		"test": "jest",
 		"compile": "tsc",
 		"compileNe": "tsc --noEmit",
