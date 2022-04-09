@@ -40,6 +40,16 @@
 		"preset": "ts-jest",
 		"testEnvironment": "node",
 		"collectCoverage": true,
+		"collectCoverageFrom": [
+			"index.ts",
+			"./utils/**"
+		],
+		"coverageThreshold": {
+			"global": {
+				"lines": 80,
+				"funcs": 100
+			}
+		},
 		"coverageDirectory": ".coverage"
 	}
 }
