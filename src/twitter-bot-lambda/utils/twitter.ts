@@ -27,7 +27,7 @@ export const fetchTweets = async (
 
 	let response: TweetFetchResponse = {
 		statusCode: 500,
-		message: "Failed to fetch Tweets."
+		message: "Failed to fetch tweets"
 	}
 
 	try {
@@ -36,7 +36,7 @@ export const fetchTweets = async (
 		if (axiosResponse.data.data) {
 			response = {
 				statusCode: axiosResponse.status,
-				message: "Tweets fetched successfully.",
+				message: "Tweets fetched successfully",
 				tweets: axiosResponse.data.data
 			}
 		} else {
