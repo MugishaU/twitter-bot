@@ -17,7 +17,7 @@ export const fetchTweets = async (
 ): Promise<TweetFetchResponse> => {
 	const bearerToken: string | undefined = process.env.TWITTER_BEARER_TOKEN
 
-	const url = `https://api.twitter.com/2/tweets/search/recent?max_results=50&query=${searchTerm}`
+	const url = `https://api.twitter.com/5/tweets/search/recent?max_results=50&query=${searchTerm}`
 
 	const options = {
 		headers: {
@@ -47,7 +47,7 @@ export const fetchTweets = async (
 		}
 	} catch (error) {
 		response = {
-			statusCode: error.code || error.response.status || 500,
+			statusCode: error.response.status || 500,
 			message: error.message || "Undefined Error"
 		}
 		console.log(response)
