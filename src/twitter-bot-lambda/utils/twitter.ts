@@ -13,16 +13,12 @@ interface TweetFetchResponse {
 }
 
 export const fetchTweets = async (
-	searchTerm: string,
-	tweets: Tweet[] = [],
-	nextToken?: string,
-	index: number = 0
+	searchTerm: string
 ): Promise<TweetFetchResponse> => {
-	const bearerToken: string = process.env.TWITTER_BEARER_TOKEN || "Not Found"
+	const bearerToken: string | undefined = process.env.TWITTER_BEARER_TOKEN
 
-	const searchUrl = `https://api.twitter.com/2/tweets/search/recent?query=${searchTerm}`
-	const nextTokenQuery = nextToken ? `&next_token=${nextToken}` : ""
-	const urlWithNextToken = searchUrl + nextTokenQuery
+	const url = `https://api.twitter.com/2/tweets/search/recent?max_results=50&query=${searchTerm}`
+
 	const options = {
 		headers: {
 			Authorization: `BEARER ${bearerToken}`
@@ -31,32 +27,22 @@ export const fetchTweets = async (
 
 	let response: TweetFetchResponse = {
 		statusCode: 500,
-		message: "fetchTweets failed to run."
+		message: "Failed to fetch Tweets."
 	}
 
 	try {
-		const axiosResponse: AxiosResponse = await axios.get(
-			urlWithNextToken,
-			options
-		)
-		const currentResults = tweets
+		const axiosResponse: AxiosResponse = await axios.get(url, options)
 
 		if (axiosResponse.data.data) {
-			currentResults.push(axiosResponse.data.data)
-		}
-
-		if (axiosResponse.data.meta.next_token && index < 4) {
-			fetchTweets(
-				searchTerm,
-				currentResults,
-				axiosResponse.data.meta.next_token,
-				(index += 1)
-			)
+			response = {
+				statusCode: axiosResponse.status,
+				message: "Tweets fetched successfully.",
+				tweets: axiosResponse.data.data
+			}
 		} else {
 			response = {
-				statusCode: 200,
-				message: "Tweets fetched successfully.",
-				tweets: tweets.flat()
+				statusCode: axiosResponse.status,
+				message: `No tweets matching search term '${searchTerm}'`
 			}
 		}
 	} catch (error) {
