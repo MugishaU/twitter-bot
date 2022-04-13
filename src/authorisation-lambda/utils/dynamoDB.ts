@@ -59,6 +59,7 @@ export const getItem = async (
 		}
 		return response
 	} catch (error) {
+		console.log(`ERROR: ${error}`)
 		if (hasErrorInfo(error)) {
 			const errorResponse: DynamoDbResult = {
 				statusCode: error.$metadata.httpStatusCode,
@@ -104,6 +105,7 @@ export const putItem = async (
 		}
 		return response
 	} catch (error) {
+		console.log(`ERROR: ${error}`)
 		if (hasErrorInfo(error)) {
 			const errorResponse: DynamoDbResult = {
 				statusCode: error.$metadata.httpStatusCode,
