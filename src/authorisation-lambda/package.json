@@ -41,7 +41,6 @@
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"collectCoverageFrom": [
-			"index.ts",
 			"./utils/**"
 		],
 		"coverageThreshold": {
