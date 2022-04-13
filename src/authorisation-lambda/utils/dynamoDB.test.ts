@@ -210,7 +210,7 @@ describe("putItem", () => {
 				message: "Requested resource not found"
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" }, false)
+		const item = await putItem("test-table", { id: "0", foo: "bar" })
 		expect(item).toStrictEqual({
 			statusCode: 400,
 			errorMessage: "Requested resource not found"
