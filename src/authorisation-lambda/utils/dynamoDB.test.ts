@@ -104,7 +104,7 @@ describe("getItem", () => {
 describe("putItem", () => {
 	beforeAll(() => {
 		jest.useFakeTimers()
-		jest.setSystemTime(new Date(2021, 7, 21, 0, 0, 0, 0))
+		jest.setSystemTime(new Date(2021, 7, 21))
 	})
 
 	afterAll(() => {
@@ -117,7 +117,7 @@ describe("putItem", () => {
 
 	it("test fake timers", () => {
 		const g = Math.floor(new Date().getTime() / 1000)
-		expect(g).toBe(1629500400)
+		expect(g).toBe(1629504000)
 	})
 
 	// it("should successfully put item into DynamoDb with ttl", async () => {
