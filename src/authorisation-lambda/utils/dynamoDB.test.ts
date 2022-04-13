@@ -104,7 +104,7 @@ describe("getItem", () => {
 describe("putItem", () => {
 	beforeAll(() => {
 		jest.useFakeTimers()
-		jest.setSystemTime(new Date(2021, 7, 21))
+		jest.setSystemTime(new Date(2021, 7, 21, 0, 0, 0, 0))
 	})
 
 	afterAll(() => {
