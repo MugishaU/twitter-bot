@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: "Test"
+  test-1:
+    name: "Test Authorisation Lambda"
     runs-on: ubuntu-latest
     environment: production
 
@@ -31,11 +31,37 @@ jobs:
       - name: Run Unit Tests
         run: |
           npm install
-          npm test --verbose
+          npm test
+        shell: bash
+
+  test-2:
+    name: "Test Twitter Bot Lambda"
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: src/twitter-bot-lambda
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+          cache-dependency-path: src/twitter-bot-lambda/package-lock.json
+
+      - name: Run Unit Tests
+        run: |
+          npm install
+          npm test
         shell: bash
 
   terraform:
-    needs: test
+    needs: [test-1, test-2]
     name: "Terraform"
     runs-on: ubuntu-latest
     environment: production
