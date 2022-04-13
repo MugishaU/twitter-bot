@@ -4,14 +4,13 @@ on:
   push:
     branches:
       - main
-      - keyGuard
   pull_request:
   workflow_dispatch:
 
 jobs:
   test:
     name: "Test"
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment: production
 
     defaults:
