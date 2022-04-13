@@ -1,6 +1,5 @@
-export const hasKeyGuard = <K extends string, T>(
+export const hasKeyGuard = <K extends string>(
 	value: unknown,
-	key: K,
-	type?: T
-): value is { [k in K]: T } =>
+	key: K
+): value is { [k in K]: unknown } =>
 	value instanceof Object && value.hasOwnProperty(key)
