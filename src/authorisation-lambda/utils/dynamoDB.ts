@@ -1,10 +1,12 @@
 import {
+	DynamoDB,
 	DynamoDBClient,
 	GetItemCommand,
 	GetItemCommandOutput,
 	PutItemCommand
 } from "@aws-sdk/client-dynamodb"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
+import { hasKeyGuard } from "./keyGuard"
 
 interface DynamoDbPrimaryKey {
 	id: string
@@ -18,6 +20,22 @@ interface DynamoDbResult {
 	statusCode: number
 	body?: { [key: string]: string | number | boolean }
 	errorMessage?: string
+}
+
+const hasErrorInfo = (
+	value: unknown
+): value is { message: string; $metadata: { httpStatusCode: number } } => {
+	const hasMessage =
+		hasKeyGuard(value, "message") && typeof value.message === "string"
+
+	if (hasKeyGuard(value, "$metadata")) {
+		const $metadata = value.$metadata
+		if (hasKeyGuard($metadata, "httpStatusCode")) {
+			const hasHttpStatusCode = typeof $metadata.httpStatusCode === "number"
+			return hasMessage && hasHttpStatusCode
+		}
+	}
+	return false
 }
 
 const ddbClient = new DynamoDBClient({})
@@ -41,13 +59,22 @@ export const getItem = async (
 		}
 		return response
 	} catch (error) {
-		const errorResponse: DynamoDbResult = {
-			statusCode: error.$metadata.httpStatusCode || 500,
-			errorMessage: error.message || "Undefined Error"
-		}
+		if (hasErrorInfo(error)) {
+			const errorResponse: DynamoDbResult = {
+				statusCode: error.$metadata.httpStatusCode,
+				errorMessage: error.message
+			}
 
-		console.error(errorResponse)
-		return errorResponse
+			console.log(errorResponse)
+			return errorResponse
+		} else {
+			const genericErrorResponse: DynamoDbResult = {
+				statusCode: 500,
+				errorMessage: "Undefined Error"
+			}
+			console.log(genericErrorResponse)
+			return genericErrorResponse
+		}
 	}
 }
 
@@ -77,12 +104,21 @@ export const putItem = async (
 		}
 		return response
 	} catch (error) {
-		const errorResponse: DynamoDbResult = {
-			statusCode: error.$metadata.httpStatusCode || 500,
-			errorMessage: error.message || "Undefined Error"
-		}
+		if (hasErrorInfo(error)) {
+			const errorResponse: DynamoDbResult = {
+				statusCode: error.$metadata.httpStatusCode,
+				errorMessage: error.message
+			}
 
-		console.log(errorResponse)
-		return errorResponse
+			console.log(errorResponse)
+			return errorResponse
+		} else {
+			const genericErrorResponse: DynamoDbResult = {
+				statusCode: 500,
+				errorMessage: "Undefined Error"
+			}
+			console.log(genericErrorResponse)
+			return genericErrorResponse
+		}
 	}
 }
