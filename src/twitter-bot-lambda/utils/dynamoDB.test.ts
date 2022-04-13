@@ -90,9 +90,7 @@ describe("getItem", () => {
 					}
 				}
 			})
-			.rejects({
-				$metadata: {}
-			})
+			.rejects()
 		const item = await getItem("test-table", { id: "0" })
 		expect(item).toStrictEqual({
 			statusCode: 500,
@@ -126,7 +124,7 @@ describe("putItem", () => {
 					foo: {
 						S: "bar"
 					},
-					ttl: { N: "1630105200" }
+					ttl: { N: "1630108800" }
 				}
 			})
 			.resolves({
@@ -134,24 +132,7 @@ describe("putItem", () => {
 			})
 
 		const item = await putItem("test-table", { id: "0", foo: "bar" })
-		const mockFunctionCall = ddbMock.commandCalls(
-			PutItemCommand,
-			{
-				TableName: "test-table",
-				Item: {
-					id: {
-						S: "0"
-					},
-					foo: {
-						S: "bar"
-					},
-					ttl: { N: "1630105200" }
-				}
-			},
-			true
-		)
 		expect(item).toStrictEqual({ statusCode: 200 })
-		expect(mockFunctionCall.length).toBe(1)
 	})
 
 	it("should successfully put item into DynamoDb without ttl", async () => {
@@ -172,23 +153,7 @@ describe("putItem", () => {
 			})
 
 		const item = await putItem("test-table", { id: "0", foo: "bar" }, false)
-		const mockFunctionCall = ddbMock.commandCalls(
-			PutItemCommand,
-			{
-				TableName: "test-table",
-				Item: {
-					id: {
-						S: "0"
-					},
-					foo: {
-						S: "bar"
-					}
-				}
-			},
-			true
-		)
 		expect(item).toStrictEqual({ statusCode: 200 })
-		expect(mockFunctionCall.length).toBe(1)
 	})
 
 	it("should return a defined error correctly", async () => {
@@ -202,7 +167,7 @@ describe("putItem", () => {
 					foo: {
 						S: "bar"
 					},
-					ttl: { N: "1630105200" }
+					ttl: { N: "1630108800" }
 				}
 			})
 			.rejects({
@@ -228,12 +193,10 @@ describe("putItem", () => {
 					foo: {
 						S: "bar"
 					},
-					ttl: { N: "1630105200" }
+					ttl: { N: "1630108800" }
 				}
 			})
-			.rejects({
-				$metadata: {}
-			})
+			.rejects()
 
 		const item = await putItem("test-table", { id: "0", foo: "bar" })
 		expect(item).toStrictEqual({
