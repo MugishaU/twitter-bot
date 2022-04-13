@@ -4,7 +4,7 @@
 	"description": "A lambda that will enable the twitter [Oauth 2.0 PKCE flow](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens).",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "TZ=UTC jest",
 		"compile": "tsc",
 		"compileNe": "tsc --noEmit",
 		"compileWatch": "tsc -b -v -i -w",
@@ -41,7 +41,6 @@
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"collectCoverageFrom": [
-			"index.ts",
 			"./utils/**"
 		],
 		"coverageThreshold": {

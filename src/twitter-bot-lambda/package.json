@@ -4,7 +4,7 @@
 	"description": "A bot that will retweet tweets that meet specific criteria using the [Twitter API](https://developer.twitter.com/en/docs/twitter-api).",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "TZ=UTC jest",
 		"compile": "tsc",
 		"compileNe": "tsc --noEmit",
 		"compileWatch": "tsc -b -v -i -w"
@@ -40,7 +40,6 @@
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"collectCoverageFrom": [
-			"index.ts",
 			"./utils/**"
 		],
 		"coverageThreshold": {
