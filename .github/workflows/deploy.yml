@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          npm install
+          npm install --verbose
           npm test --verbose
         shell: bash
 
