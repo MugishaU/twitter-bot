@@ -102,14 +102,14 @@ describe("getItem", () => {
 })
 
 describe("putItem", () => {
-	beforeAll(() => {
-		jest.useFakeTimers()
-		jest.setSystemTime(new Date(2021, 7, 21))
-	})
+	// beforeAll(() => {
+	// 	jest.useFakeTimers()
+	// 	jest.setSystemTime(new Date(2021, 7, 21))
+	// })
 
-	afterAll(() => {
-		jest.useRealTimers()
-	})
+	// afterAll(() => {
+	// 	jest.useRealTimers()
+	// })
 
 	beforeEach(() => {
 		ddbMock.reset()
