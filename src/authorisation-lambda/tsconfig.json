@@ -9,7 +9,7 @@
 		"noEmitOnError": true,
 		"strictNullChecks": true,
 		"moduleResolution": "node",
-		"types": ["node"],
+		"types": ["node", "jest"],
 		"lib": ["es6"],
 		"esModuleInterop": true,
 		"skipLibCheck": true,

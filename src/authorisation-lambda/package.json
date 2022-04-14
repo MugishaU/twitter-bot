@@ -4,8 +4,7 @@
 	"description": "A lambda that will enable the twitter [Oauth 2.0 PKCE flow](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens).",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js",
-		"test": "test",
+		"test": "TZ=UTC jest",
 		"compile": "tsc",
 		"compileNe": "tsc --noEmit",
 		"compileWatch": "tsc -b -v -i -w",
@@ -29,8 +28,27 @@
 		"dotenv": "^14.3.2"
 	},
 	"devDependencies": {
+		"@types/jest": "^27.4.1",
 		"@types/node": "^17.0.23",
+		"aws-sdk-client-mock": "^0.6.2",
+		"jest": "^27.5.1",
+		"ts-jest": "^27.1.4",
 		"ts-node": "^10.7.0",
 		"typescript": "^4.6.3"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node",
+		"collectCoverage": true,
+		"collectCoverageFrom": [
+			"./utils/**"
+		],
+		"coverageThreshold": {
+			"global": {
+				"lines": 80,
+				"funcs": 100
+			}
+		},
+		"coverageDirectory": ".coverage"
 	}
 }

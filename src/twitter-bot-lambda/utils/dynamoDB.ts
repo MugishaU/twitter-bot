@@ -1,11 +1,12 @@
 import {
+	DynamoDB,
 	DynamoDBClient,
 	GetItemCommand,
 	GetItemCommandOutput,
-	PutItemCommand,
+	PutItemCommand
 } from "@aws-sdk/client-dynamodb"
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
-import { returnElseDefault } from "./helpers"
+import { hasKeyGuard } from "./keyGuard"
 
 interface DynamoDbPrimaryKey {
 	id: string
@@ -18,6 +19,23 @@ interface DynamoDbItem {
 interface DynamoDbResult {
 	statusCode: number
 	body?: { [key: string]: string | number | boolean }
+	errorMessage?: string
+}
+
+const hasErrorInfo = (
+	value: unknown
+): value is { message: string; $metadata: { httpStatusCode: number } } => {
+	const hasMessage =
+		hasKeyGuard(value, "message") && typeof value.message === "string"
+
+	if (hasKeyGuard(value, "$metadata")) {
+		const $metadata = value.$metadata
+		if (hasKeyGuard($metadata, "httpStatusCode")) {
+			const hasHttpStatusCode = typeof $metadata.httpStatusCode === "number"
+			return hasMessage && hasHttpStatusCode
+		}
+	}
+	return false
 }
 
 const ddbClient = new DynamoDBClient({})
@@ -28,7 +46,7 @@ export const getItem = async (
 ): Promise<DynamoDbResult> => {
 	const params = {
 		TableName: tableName,
-		Key: marshall(primaryKey),
+		Key: marshall(primaryKey)
 	}
 
 	try {
@@ -36,21 +54,28 @@ export const getItem = async (
 			new GetItemCommand(params)
 		)
 		const response: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
-			body: data.Item ? unmarshall(data.Item) : undefined,
+			statusCode: data.$metadata.httpStatusCode || 500,
+			body: data.Item ? unmarshall(data.Item) : undefined
 		}
 		return response
 	} catch (error) {
-		const errorResponse: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(
-				error.$metadata.httpStatusCode,
-				500
-			),
-			body: error.message,
-		}
+		console.log(`ERROR: ${error}`)
+		if (hasErrorInfo(error)) {
+			const errorResponse: DynamoDbResult = {
+				statusCode: error.$metadata.httpStatusCode,
+				errorMessage: error.message
+			}
 
-		console.error(errorResponse)
-		return errorResponse
+			console.log(errorResponse)
+			return errorResponse
+		} else {
+			const genericErrorResponse: DynamoDbResult = {
+				statusCode: 500,
+				errorMessage: "Undefined Error"
+			}
+			console.log(genericErrorResponse)
+			return genericErrorResponse
+		}
 	}
 }
 
@@ -68,7 +93,7 @@ export const putItem = async (
 
 	const params = {
 		TableName: tableName,
-		Item: marshall(item),
+		Item: marshall(item)
 	}
 
 	try {
@@ -76,19 +101,25 @@ export const putItem = async (
 			new PutItemCommand(params)
 		)
 		const response: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(data.$metadata.httpStatusCode, 500),
+			statusCode: data.$metadata.httpStatusCode || 500
 		}
 		return response
 	} catch (error) {
-		const errorResponse: DynamoDbResult = {
-			statusCode: returnElseDefault<number>(
-				error.$metadata.httpStatusCode,
-				500
-			),
-			body: error.message,
-		}
+		if (hasErrorInfo(error)) {
+			const errorResponse: DynamoDbResult = {
+				statusCode: error.$metadata.httpStatusCode,
+				errorMessage: error.message
+			}
 
-		console.log(errorResponse)
-		return errorResponse
+			console.log(errorResponse)
+			return errorResponse
+		} else {
+			const genericErrorResponse: DynamoDbResult = {
+				statusCode: 500,
+				errorMessage: "Undefined Error"
+			}
+			console.log(genericErrorResponse)
+			return genericErrorResponse
+		}
 	}
 }

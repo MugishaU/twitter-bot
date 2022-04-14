@@ -6,7 +6,7 @@ export const handler = async (
 	let statusCode: number
 	let body: string = ""
 	const headers = {
-		"Content-Type": "application/json",
+		"Content-Type": "application/json"
 	}
 
 	try {
@@ -38,7 +38,7 @@ export const handler = async (
 		}
 	} catch (error) {
 		statusCode = 400
-		body = error.message ? error.message : "error"
+		body = error.message || "Undefined Error"
 		console.error(body)
 	} finally {
 		body = JSON.stringify(body)
@@ -47,6 +47,6 @@ export const handler = async (
 	return {
 		headers,
 		statusCode,
-		body,
+		body
 	}
 }
