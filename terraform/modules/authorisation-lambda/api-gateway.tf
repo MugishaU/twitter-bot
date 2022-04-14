@@ -22,14 +22,14 @@ resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-authorise-route" {
   api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway.id
   route_key          = "GET /authorise"
   target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
-  authorization_type = "NONE"
+  authorization_type = "AWS_IAM"
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-callback-route" {
   api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway.id
-  route_key          = "POST /callback"
+  route_key          = "GET /callback"
   target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
-  authorization_type = "AWS_IAM"
+  authorization_type = "NONE"
 }
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-token-route" {
