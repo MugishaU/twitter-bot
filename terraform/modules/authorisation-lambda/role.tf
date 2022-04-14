@@ -70,6 +70,6 @@ data "aws_iam_policy_document" "twitter-auth-api-gateway-policy-document" {
     sid       = "InvokeAPIGateway"
     effect    = "Allow"
     actions   = ["execute-api:Invoke"]
-    resources = ["${aws_apigatewayv2_api.twitter-auth-api-gateway-terraform.execution_arn}/*"]
+    resources = ["${aws_apigatewayv2_api.twitter-auth-api-gateway.execution_arn}/*"]
   }
 }
