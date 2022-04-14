@@ -86,7 +86,7 @@ describe("fetchTweets", () => {
 	})
 })
 
-describe("fetchTweets", () => {
+describe("retweet", () => {
 	beforeAll(() => {
 		process.env = Object.assign(process.env, {
 			TWITTER_BEARER_TOKEN: "test-bearer-token"
