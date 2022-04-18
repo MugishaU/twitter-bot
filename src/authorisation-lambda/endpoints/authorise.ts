@@ -12,17 +12,13 @@ const generateUrl = (redirectUri: string, scope: string[]): any => {
 	const state = crypto.randomBytes(64).toString("hex")
 
 	const codeVerifier = crypto.randomBytes(64).toString("hex")
-	const sha256 = crypto.createHash("sha256").update(codeVerifier).digest("hex")
-	const codeChallenge = base64url(sha256)
+	const sha256 = crypto
+		.createHash("sha256")
+		.update(codeVerifier)
+		.digest("base64")
+	const codeChallenge = base64url.fromBase64(sha256)
 
 	const oauthUrl = `${twitterUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${flatScope}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=${codeChallengeMethod}`
 
 	return oauthUrl
 }
-
-console.log(
-	generateUrl(
-		"https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/callback",
-		["tweet.read", "tweet.write", "users.read", "offline.access"]
-	)
-)
