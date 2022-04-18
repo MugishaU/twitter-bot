@@ -25,6 +25,7 @@
 		"@aws-sdk/util-dynamodb": "^3.54.1",
 		"@types/aws-lambda": "^8.10.93",
 		"axios": "^0.25.0",
+		"base64url": "^3.0.1",
 		"dotenv": "^14.3.2"
 	},
 	"devDependencies": {

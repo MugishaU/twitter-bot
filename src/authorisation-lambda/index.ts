@@ -16,7 +16,7 @@ export const handler = async (
 				statusCode = 200
 				body = "authorise test"
 				break
-			case "POST /callback":
+			case "GET /callback":
 				console.log("/callback called.")
 				statusCode = 200
 				body = "callback"
