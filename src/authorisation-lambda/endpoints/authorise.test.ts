@@ -7,7 +7,7 @@ describe("authorise", () => {
 		jest.clearAllMocks()
 	})
 
-	it("should return a redirect response when all 'putItem' calls are succesful", async () => {
+	it("should return a redirect response when all 'putItem' calls are successful", async () => {
 		jest.spyOn(dynamoDB, "putItem").mockResolvedValue({ statusCode: 200 })
 		jest.spyOn(ouathURL, "generateUrl").mockReturnValue({
 			state: "state",
@@ -18,7 +18,7 @@ describe("authorise", () => {
 		const result = await authorise()
 		expect(result).toStrictEqual({
 			statusCode: 303,
-			headers: { "Content-Type": "application/json", Location: "foo" },
+			headers: { Location: "foo" },
 			body: ""
 		})
 	})
