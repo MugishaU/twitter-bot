@@ -3,8 +3,9 @@ import crypto from "crypto"
 import base64url from "base64url"
 
 interface OauthUrl {
-	oauthUrl: string
+	state: string
 	codeVerifier: string
+	oauthUrl: string
 }
 
 export const generateUrl = (redirectUri: string, scope: string[]): OauthUrl => {
@@ -25,5 +26,5 @@ export const generateUrl = (redirectUri: string, scope: string[]): OauthUrl => {
 
 	const oauthUrl = `${twitterUrl}?response_type=${responseType}&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${flatScope}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=${codeChallengeMethod}`
 
-	return { codeVerifier, oauthUrl }
+	return { state, codeVerifier, oauthUrl }
 }
