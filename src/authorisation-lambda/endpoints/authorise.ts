@@ -13,7 +13,7 @@ export const authorise = async (): Promise<APIGatewayProxyResult> => {
 		value: url.state
 	})
 
-	const putCodeVerifier = putItem("twitdter-auth", {
+	const putCodeVerifier = putItem("twitter-auth", {
 		id: "codeVerifier",
 		value: url.codeVerifier
 	})
@@ -24,7 +24,7 @@ export const authorise = async (): Promise<APIGatewayProxyResult> => {
 	if (stateResult.statusCode == 200 && codeVerifierResult.statusCode == 200) {
 		return {
 			statusCode: 303,
-			headers: { "Content-Type": "application/json", Location: url.oauthUrl },
+			headers: { Location: url.oauthUrl },
 			body: ""
 		}
 	}
