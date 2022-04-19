@@ -8,7 +8,7 @@ const base64urlMock = base64url as jest.Mocked<typeof base64url>
 describe("generateUrl", () => {
 	beforeAll(() => {
 		process.env = Object.assign(process.env, {
-			CLIENT_ID: "client-id"
+			CLIENT_ID: "client"
 		})
 	})
 
@@ -29,7 +29,7 @@ describe("generateUrl", () => {
 			state: "state",
 			codeVerifier: "codeVerifier",
 			oauthUrl:
-				"https://twitter.com/i/oauth2/authorize?response_type=code&client_id=client-id&redirect_uri=redirect&scope=foo%20bar&state=state&code_challenge=challenge&code_challenge_method=S256"
+				"https://twitter.com/i/oauth2/authorize?response_type=code&client_id=client&redirect_uri=redirect&scope=foo%20bar&state=state&code_challenge=challenge&code_challenge_method=S256"
 		})
 	})
 })
