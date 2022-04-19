@@ -8,9 +8,12 @@ interface OauthUrl {
 	oauthUrl: string
 }
 
-export const generateUrl = (redirectUri: string, scope: string[]): OauthUrl => {
+export const generateUrl = (
+	clientId: string,
+	redirectUri: string,
+	scope: string[]
+): OauthUrl => {
 	const twitterUrl = "https://twitter.com/i/oauth2/authorize"
-	const clientId = process.env.CLIENT_ID
 	const flatScope = scope.join("%20")
 
 	const responseType = "code"

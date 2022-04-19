@@ -6,12 +6,6 @@ jest.mock("base64url")
 const base64urlMock = base64url as jest.Mocked<typeof base64url>
 
 describe("generateUrl", () => {
-	beforeAll(() => {
-		process.env = Object.assign(process.env, {
-			CLIENT_ID: "client"
-		})
-	})
-
 	beforeEach(() => {
 		jest.clearAllMocks()
 	})
@@ -23,8 +17,7 @@ describe("generateUrl", () => {
 			.mockImplementationOnce(() => "codeVerifier")
 		base64urlMock.fromBase64.mockReturnValue("challenge")
 
-		const url = generateUrl("redirect", ["foo", "bar"])
-
+		const url = generateUrl("client", "redirect", ["foo", "bar"])
 		expect(url).toStrictEqual({
 			state: "state",
 			codeVerifier: "codeVerifier",

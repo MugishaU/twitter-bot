@@ -4,6 +4,7 @@ import { APIGatewayProxyResult } from "aws-lambda"
 
 export const authorise = async (): Promise<APIGatewayProxyResult> => {
 	const url = generateUrl(
+		"OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
 		"https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/callback",
 		["tweet.read", "tweet.write", "users.read", "offline.access"]
 	)
