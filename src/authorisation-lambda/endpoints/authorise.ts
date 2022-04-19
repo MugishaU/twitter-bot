@@ -8,14 +8,12 @@ export const authorise = async (): Promise<APIGatewayProxyResult> => {
 		["tweet.read", "tweet.write", "users.read", "offline.access"]
 	)
 
-	console.log(url.codeVerifier)
-
 	const putState = putItem("twitter-auth", {
 		id: "state",
 		value: url.state
 	})
 
-	const putCodeVerifier = putItem("twitter-auth", {
+	const putCodeVerifier = putItem("twitdter-auth", {
 		id: "codeVerifier",
 		value: url.codeVerifier
 	})
