@@ -5,11 +5,6 @@ resource "aws_lambda_function" "twitter-authorisation-lambda" {
   handler       = "index.handler"
   runtime       = "nodejs14.x"
   timeout       = 60
-  environment {
-    variables = {
-      CLIENT_ID = "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ"
-    }
-  }
 }
 
 resource "aws_lambda_permission" "api-gateway-lambda-permission" {
