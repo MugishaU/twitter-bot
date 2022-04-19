@@ -42,7 +42,8 @@
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"collectCoverageFrom": [
-			"./utils/**"
+			"./utils/**",
+			"./endpoints/**"
 		],
 		"coverageThreshold": {
 			"global": {
@@ -50,6 +51,9 @@
 				"funcs": 100
 			}
 		},
-		"coverageDirectory": ".coverage"
+		"coverageDirectory": ".coverage",
+		"modulePathIgnorePatterns": [
+			"./.out"
+		]
 	}
 }

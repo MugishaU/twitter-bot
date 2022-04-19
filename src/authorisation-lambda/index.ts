@@ -1,11 +1,13 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResult } from "aws-lambda"
+import { authorise } from "./endpoints/authorise"
+import { hasKeyGuard } from "./utils/keyGuard"
 
 export const handler = async (
 	event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResult> => {
 	let statusCode: number
 	let body: string = ""
-	const headers = {
+	let headers: { [header: string]: string | number | boolean } | undefined = {
 		"Content-Type": "application/json"
 	}
 
@@ -13,8 +15,14 @@ export const handler = async (
 		switch (event.routeKey) {
 			case "GET /authorise":
 				console.log("/authorise called.")
-				statusCode = 200
-				body = "authorise test"
+
+				const call = await authorise()
+
+				statusCode = call.statusCode
+				body = call.body
+				if (hasKeyGuard(call, "headers")) {
+					headers = call.headers
+				}
 				break
 			case "GET /callback":
 				console.log("/callback called.")
