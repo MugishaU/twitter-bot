@@ -6,7 +6,7 @@ export const handler = async (
 	event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResult> => {
 	let statusCode: number
-	let body: unknown = ""
+	let body: any = ""
 	let headers: { [header: string]: string | number | boolean } | undefined = {
 		"Content-Type": "application/json"
 	}
