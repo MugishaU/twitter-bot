@@ -6,7 +6,7 @@ export const handler = async (
 	event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResult> => {
 	let statusCode: number
-	let body: string = ""
+	let body: unknown = ""
 	let headers: { [header: string]: string | number | boolean } | undefined = {
 		"Content-Type": "application/json"
 	}
@@ -27,7 +27,7 @@ export const handler = async (
 			case "GET /token":
 				console.log("/token called.")
 				statusCode = 200
-				body = "token"
+				body = event.queryStringParameters
 				break
 			case "POST /refresh":
 				console.log("/refresh called.")
