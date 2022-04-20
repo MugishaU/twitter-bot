@@ -24,12 +24,7 @@ export const handler = async (
 					headers = call.headers
 				}
 				break
-			case "GET /callback":
-				console.log("/callback called.")
-				statusCode = 200
-				body = "callback"
-				break
-			case "POST /token":
+			case "GET /token":
 				console.log("/token called.")
 				statusCode = 200
 				body = "token"
