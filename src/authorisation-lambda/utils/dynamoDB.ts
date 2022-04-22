@@ -16,7 +16,7 @@ interface DynamoDbItem {
 	[key: string]: string | number | boolean
 }
 
-interface DynamoDbResult {
+export interface DynamoDbResult {
 	statusCode: number
 	body?: { [key: string]: string | number | boolean }
 	errorMessage?: string
