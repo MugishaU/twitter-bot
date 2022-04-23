@@ -15,7 +15,7 @@ interface TweetFetchResponse {
 export const fetchTweets = async (
 	searchTerm: string
 ): Promise<TweetFetchResponse> => {
-	const bearerToken: string | undefined = process.env.TWITTER_BEARER_TOKEN
+	const bearerToken = process.env.TWITTER_BEARER_TOKEN
 
 	const url = `https://api.twitter.com/2/tweets/search/recent?max_results=50&query=${searchTerm}`
 
