@@ -1,4 +1,3 @@
-import "dotenv/config"
 import crypto from "crypto"
 import base64url from "base64url"
 
