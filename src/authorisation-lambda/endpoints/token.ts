@@ -1,3 +1,6 @@
+import "dotenv/config"
+import qs from "qs"
+import axios, { Method } from "axios"
 import {
 	APIGatewayProxyResult,
 	APIGatewayProxyEventQueryStringParameters
@@ -14,7 +17,8 @@ const hasStateAndCode = (
 	return hasState && hasCode
 }
 
-const checkDynamoDbState = (item: DynamoDbResult): string | null => {
+//Consider making this function available as a util
+const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
 	if (
 		item.statusCode == 200 &&
 		hasKeyGuard(item, "body") &&
@@ -33,13 +37,83 @@ const gatewayResponse = (
 	return { statusCode: code, body: message }
 }
 
+const fetchAndSaveTokens = async (code: string): Promise<any> => {
+	const dynamoDbResult = await getItem("twitter-auth", { id: "codeVerifier" })
+	const codeVerifier = checkDynamoDbResult(dynamoDbResult)
+
+	if (codeVerifier) {
+		try {
+			const url = "https://api.twitter.com/2/oauth2/token"
+			const body = {
+				code: code,
+				grant_type: "authorization_code",
+				client_id: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
+				redirect_uri:
+					"https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/token",
+				code_verifier: codeVerifier
+			}
+			const method: Method = "post"
+			const clientSecret = `${process.env.CLIENT_SECRET}`
+			const options = {
+				method: method,
+				url: url,
+				headers: { "content-type": "application/x-www-form-urlencoded" },
+				data: qs.stringify(body),
+				auth: {
+					username: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
+					password: clientSecret
+				}
+			}
+			const result = await axios(options)
+			if (hasKeyGuard(result, "data")) {
+				const accessToken: string = result.data.access_token
+				const refreshToken: string = result.data.refresh_token
+				const accessTokenSave = putItem("twitter-auth", {
+					id: "accessToken",
+					value: accessToken
+				})
+				const refreshTokenSave = putItem("twitter-auth", {
+					id: "refreshToken",
+					value: refreshToken
+				})
+
+				const accessTokenSaveResult = await accessTokenSave
+				const refreshTokenSaveResult = await refreshTokenSave
+
+				if (
+					accessTokenSaveResult.statusCode == 200 &&
+					refreshTokenSaveResult.statusCode == 200
+				) {
+					return gatewayResponse(
+						200,
+						"Access Token and Refresh Token saved to authorisation server."
+					)
+				} else {
+					return gatewayResponse(
+						500,
+						"Error saving Access Token and Refresh Token to authorisation server"
+					)
+				}
+			}
+			return result
+		} catch (error) {
+			return error
+		}
+	} else {
+		return gatewayResponse(
+			404,
+			"Code Verifier not found on authorisation server."
+		)
+	}
+}
+
 export const token = async (
 	queryParams: APIGatewayProxyEventQueryStringParameters
 ): Promise<APIGatewayProxyResult> => {
 	if (hasStateAndCode(queryParams)) {
 		const queryParamState = queryParams.state
 		const dynamoDbResult = await getItem("twitter-auth", { id: "state" })
-		const dynamoDbState = checkDynamoDbState(dynamoDbResult)
+		const dynamoDbState = checkDynamoDbResult(dynamoDbResult)
 
 		if (dynamoDbState) {
 			if (queryParamState == dynamoDbState) {
