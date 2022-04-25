@@ -15,7 +15,7 @@ interface DynamoDbItem {
 	[key: string]: string | number | boolean
 }
 
-interface DynamoDbResult {
+export interface DynamoDbResult {
 	statusCode: number
 	body?: { [key: string]: string | number | boolean }
 	errorMessage?: string
@@ -121,4 +121,16 @@ export const putItem = async (
 			return genericErrorResponse
 		}
 	}
+}
+
+export const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
+	if (
+		item.statusCode == 200 &&
+		hasKeyGuard(item, "body") &&
+		hasKeyGuard(item.body, "value") &&
+		typeof item.body.value == "string"
+	) {
+		return item.body.value
+	}
+	return null
 }

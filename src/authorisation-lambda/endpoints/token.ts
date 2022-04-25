@@ -5,7 +5,7 @@ import {
 	APIGatewayProxyResult,
 	APIGatewayProxyEventQueryStringParameters
 } from "aws-lambda"
-import { getItem, putItem, DynamoDbResult } from "../utils/dynamoDB"
+import { getItem, putItem, checkDynamoDbResult } from "../utils/dynamoDB"
 import { hasKeyGuard } from "../utils/keyGuard"
 
 const hasStateAndCode = (
@@ -15,19 +15,6 @@ const hasStateAndCode = (
 	const hasCode = hasKeyGuard(value, "code") && typeof value.code == "string"
 
 	return hasState && hasCode
-}
-
-//Consider making this function available as a util
-const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
-	if (
-		item.statusCode == 200 &&
-		hasKeyGuard(item, "body") &&
-		hasKeyGuard(item.body, "value") &&
-		typeof item.body.value == "string"
-	) {
-		return item.body.value
-	}
-	return null
 }
 
 const gatewayResponse = (

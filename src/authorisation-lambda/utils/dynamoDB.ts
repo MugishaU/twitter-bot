@@ -122,3 +122,15 @@ export const putItem = async (
 		}
 	}
 }
+
+export const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
+	if (
+		item.statusCode == 200 &&
+		hasKeyGuard(item, "body") &&
+		hasKeyGuard(item.body, "value") &&
+		typeof item.body.value == "string"
+	) {
+		return item.body.value
+	}
+	return null
+}
