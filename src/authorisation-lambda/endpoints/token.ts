@@ -24,7 +24,9 @@ const gatewayResponse = (
 	return { statusCode: code, body: message }
 }
 
-const fetchAndSaveTokens = async (code: string): Promise<any> => {
+const fetchAndSaveTokens = async (
+	code: string
+): Promise<APIGatewayProxyResult> => {
 	const dynamoDbResult = await getItem("twitter-auth", { id: "codeVerifier" })
 	const codeVerifier = checkDynamoDbResult(dynamoDbResult)
 
@@ -104,7 +106,8 @@ export const token = async (
 
 		if (dynamoDbState) {
 			if (queryParamState == dynamoDbState) {
-				return gatewayResponse(200, "match")
+				const tokenResult = await fetchAndSaveTokens(queryParams.code)
+				return tokenResult
 			} else {
 				return gatewayResponse(
 					400,
