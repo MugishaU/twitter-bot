@@ -86,7 +86,9 @@ const fetchAndSaveTokens = async (
 			}
 			return result
 		} catch (error) {
-			return error
+			const statusCode: number = error.response.status
+			const body: string = error.message
+			return { statusCode, body }
 		}
 	} else {
 		return gatewayResponse(
