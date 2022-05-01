@@ -33,27 +33,26 @@ const fetchAndSaveTokens = async (
 	if (codeVerifier) {
 		try {
 			const url = "https://api.twitter.com/2/oauth2/token"
-			const body = {
+
+			const config = {
+				headers: { "content-type": "application/x-www-form-urlencoded" },
+				auth: {
+					username: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
+					password: `${process.env.CLIENT_SECRET}`
+				}
+			}
+
+			const body = qs.stringify({
 				code: code,
 				grant_type: "authorization_code",
 				client_id: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
 				redirect_uri:
 					"https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/token",
 				code_verifier: codeVerifier
-			}
-			const method: Method = "post"
-			const clientSecret = `${process.env.CLIENT_SECRET}`
-			const options = {
-				method: method,
-				url: url,
-				headers: { "content-type": "application/x-www-form-urlencoded" },
-				data: qs.stringify(body),
-				auth: {
-					username: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
-					password: clientSecret
-				}
-			}
-			const result = await axios(options)
+			})
+
+			const result = await axios.post(url, body, config)
+
 			if (hasKeyGuard(result, "data")) {
 				const accessToken: string = result.data.access_token
 				const refreshToken: string = result.data.refresh_token
@@ -80,11 +79,12 @@ const fetchAndSaveTokens = async (
 				} else {
 					return gatewayResponse(
 						500,
-						"Error saving Access Token and Refresh Token to authorisation server"
+						"Error saving Access Token and Refresh Token to authorisation server."
 					)
 				}
+			} else {
+				return gatewayResponse(500, "No data received from server.")
 			}
-			return result
 		} catch (error) {
 			const statusCode: number = error.response.status
 			const body: string = error.message
