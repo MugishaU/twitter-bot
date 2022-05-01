@@ -21,7 +21,7 @@ cd .out
 
 zip -r ${ZIP_NAME}.zip .
 
-aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip
+aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip | jq '.Environment = "REDACTED"'
 
 TRIES=20
 STATE=$(aws lambda get-function --function-name ${FUNCTION_NAME} --query 'Configuration.LastUpdateStatus' | jq -r)
