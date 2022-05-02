@@ -2,11 +2,6 @@ import axios from "axios"
 import * as dynamoDB from "../utils/dynamoDB"
 import { token } from "./token"
 
-//State Matches & Code Correct but fails to save
-//State Matches & Code correct but no data returned from server
-//State Matches & Code Incorrect
-//State Doesn't Match
-//State not found on DB
 //Code not found on DB
 //State and/or Code Not Provided query params
 //Axios error
@@ -73,6 +68,84 @@ describe("token", () => {
 		expect(result).toStrictEqual({
 			statusCode: 500,
 			body: "Error saving Access Token and Refresh Token to authorisation server."
+		})
+	})
+
+	it("should fail if the Twitter API returns no data", async () => {
+		jest
+			.spyOn(dynamoDB, "getItem")
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "state", value: "state" }
+			})
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "codeVerifier", value: "codeVerifier" }
+			})
+
+		axiosMock.post.mockResolvedValueOnce({
+			status: 404
+		})
+
+		const result = await token({ state: "state", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 500,
+			body: "No data received from server."
+		})
+	})
+
+	it("should fail if the authorization code passed is invalid", async () => {
+		jest.spyOn(dynamoDB, "getItem").mockResolvedValue({
+			statusCode: 200,
+			body: { id: "state", value: "state" }
+		})
+
+		axiosMock.post.mockRejectedValue({
+			response: {
+				status: 400
+			},
+			message: "Request failed with status 400."
+		})
+
+		const result = await token({ state: "state", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 400,
+			body: "Request failed with status 400."
+		})
+	})
+
+	it("should fail if the states don't match", async () => {
+		jest.spyOn(dynamoDB, "getItem").mockResolvedValue({
+			statusCode: 200,
+			body: { id: "state", value: "state" }
+		})
+
+		const result = await token({ state: "wrongState", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 400,
+			body: "State does not match authorisation server."
+		})
+	})
+
+	it("should fail if state is not found in DynamoDb", async () => {
+		jest
+			.spyOn(dynamoDB, "getItem")
+			.mockResolvedValueOnce({
+				statusCode: 404
+			})
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "codeVerifier", value: "codeVerifier" }
+			})
+
+		const result = await token({ state: "state", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 404,
+			body: "State not found on authorisation server."
 		})
 	})
 })
