@@ -5,6 +5,7 @@ import * as ouathURL from "../utils/ouathUrl"
 describe("authorise", () => {
 	beforeEach(() => {
 		jest.clearAllMocks()
+		jest.restoreAllMocks()
 	})
 
 	it("should return a redirect response when all 'putItem' calls are successful", async () => {

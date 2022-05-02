@@ -1,12 +1,13 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResult } from "aws-lambda"
 import { authorise } from "./endpoints/authorise"
+import { token } from "./endpoints/token"
 import { hasKeyGuard } from "./utils/keyGuard"
 
 export const handler = async (
 	event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResult> => {
 	let statusCode: number
-	let body: string = ""
+	let body: any = "" //TODO Change to string at the end
 	let headers: { [header: string]: string | number | boolean } | undefined = {
 		"Content-Type": "application/json"
 	}
@@ -16,18 +17,24 @@ export const handler = async (
 			case "GET /authorise":
 				console.log("/authorise called.")
 
-				const call = await authorise()
+				const result = await authorise()
 
-				statusCode = call.statusCode
-				body = call.body
-				if (hasKeyGuard(call, "headers")) {
-					headers = call.headers
+				statusCode = result.statusCode
+				body = result.body
+				if (hasKeyGuard(result, "headers")) {
+					headers = result.headers
 				}
 				break
 			case "GET /token":
 				console.log("/token called.")
-				statusCode = 200
-				body = "token"
+				if (event.queryStringParameters) {
+					const result = await token(event.queryStringParameters)
+					statusCode = result.statusCode
+					body = result.body
+				} else {
+					statusCode = 400
+					body = "State and/or code not provided."
+				}
 				break
 			case "POST /refresh":
 				console.log("/refresh called.")

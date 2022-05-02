@@ -1,5 +1,4 @@
 import {
-	DynamoDB,
 	DynamoDBClient,
 	GetItemCommand,
 	GetItemCommandOutput,
@@ -122,4 +121,16 @@ export const putItem = async (
 			return genericErrorResponse
 		}
 	}
+}
+
+export const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
+	if (
+		item.statusCode == 200 &&
+		hasKeyGuard(item, "body") &&
+		hasKeyGuard(item.body, "value") &&
+		typeof item.body.value == "string"
+	) {
+		return item.body.value
+	}
+	return null
 }

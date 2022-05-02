@@ -13,6 +13,7 @@ describe("fetchTweets", () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks()
+		jest.restoreAllMocks()
 	})
 
 	it("should successfully return tweets", async () => {

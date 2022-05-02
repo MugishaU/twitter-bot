@@ -1,8 +1,7 @@
-import "dotenv/config"
 import crypto from "crypto"
 import base64url from "base64url"
 
-interface OauthUrl {
+interface OAuth {
 	state: string
 	codeVerifier: string
 	oauthUrl: string
@@ -12,7 +11,7 @@ export const generateUrl = (
 	clientId: string,
 	redirectUri: string,
 	scope: string[]
-): OauthUrl => {
+): OAuth => {
 	const twitterUrl = "https://twitter.com/i/oauth2/authorize"
 	const flatScope = scope.join("%20")
 

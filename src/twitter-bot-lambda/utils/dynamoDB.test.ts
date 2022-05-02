@@ -5,7 +5,7 @@ import {
 	PutItemCommand
 } from "@aws-sdk/client-dynamodb"
 
-import { getItem, putItem } from "./dynamoDB"
+import { getItem, putItem, checkDynamoDbResult } from "./dynamoDB"
 
 const ddbMock = mockClient(DynamoDBClient)
 
@@ -203,5 +203,34 @@ describe("putItem", () => {
 			statusCode: 500,
 			errorMessage: "Undefined Error"
 		})
+	})
+})
+
+describe("checkDynamoDbResult", () => {
+	it("should return the dynamoDb item if retrieved successfully", () => {
+		const result = {
+			statusCode: 200,
+			body: { id: "foo", value: "bar" }
+		}
+		const itemValue = checkDynamoDbResult(result)
+		expect(itemValue).toBe("bar")
+	})
+
+	it("should return null if the DynamoDB call failed", () => {
+		const result = {
+			statusCode: 400,
+			errorMessage: "Requested resource not found"
+		}
+		const itemValue = checkDynamoDbResult(result)
+		expect(itemValue).toBeNull()
+	})
+
+	it("should return null if the DynamoDB call returns no item", () => {
+		const result = {
+			statusCode: 200,
+			body: {}
+		}
+		const itemValue = checkDynamoDbResult(result)
+		expect(itemValue).toBeNull()
 	})
 })
