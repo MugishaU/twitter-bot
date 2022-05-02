@@ -8,6 +8,7 @@ const base64urlMock = base64url as jest.Mocked<typeof base64url>
 describe("generateUrl", () => {
 	beforeEach(() => {
 		jest.clearAllMocks()
+		jest.restoreAllMocks()
 	})
 
 	it("should generate a Twitter Oauth 2.0 url and security parameters", () => {
