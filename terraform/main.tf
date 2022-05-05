@@ -23,7 +23,8 @@ provider "aws" {
 }
 
 module "authorisation-lambda" {
-  source = "./modules/authorisation-lambda"
+  source        = "./modules/authorisation-lambda"
+  CLIENT_SECRET = var.CLIENT_SECRET
 }
 
 module "dynamoDB" {
