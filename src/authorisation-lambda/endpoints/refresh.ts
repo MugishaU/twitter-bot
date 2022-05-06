@@ -42,15 +42,10 @@ export const refresh = async (): Promise<APIGatewayProxyResult> => {
 					true,
 					2
 				)
-				const refreshTokenSave = putItem(
-					"twitter-auth",
-					{
-						id: "refreshToken",
-						value: refreshToken
-					},
-					true,
-					2
-				)
+				const refreshTokenSave = putItem("twitter-auth", {
+					id: "refreshToken",
+					value: refreshToken
+				})
 
 				const accessTokenSaveResult = await accessTokenSave
 				const refreshTokenSaveResult = await refreshTokenSave
