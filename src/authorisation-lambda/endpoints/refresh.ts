@@ -74,5 +74,3 @@ export const refresh = async (): Promise<APIGatewayProxyResult> => {
 		)
 	}
 }
-
-refresh().then((x) => console.log(x))
