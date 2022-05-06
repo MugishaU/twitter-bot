@@ -4,15 +4,9 @@ import axios from "axios"
 import { APIGatewayProxyResult } from "aws-lambda"
 import { getItem, putItem, checkDynamoDbResult } from "../utils/dynamoDB"
 import { hasKeyGuard } from "../utils/keyGuard"
+import { gatewayResponse } from "../utils/gatewayResponse"
 
-const gatewayResponse = (
-	code: number,
-	message: string
-): APIGatewayProxyResult => {
-	return { statusCode: code, body: message }
-}
-
-export const refresh = async (): Promise<any> => {
+export const refresh = async (): Promise<APIGatewayProxyResult> => {
 	const dynamoDbResult = await getItem("twitter-auth", { id: "refreshToken" })
 	const refreshToken = checkDynamoDbResult(dynamoDbResult)
 

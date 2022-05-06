@@ -1,12 +1,13 @@
 import "dotenv/config"
 import qs from "qs"
-import axios, { Method } from "axios"
+import axios from "axios"
 import {
 	APIGatewayProxyResult,
 	APIGatewayProxyEventQueryStringParameters
 } from "aws-lambda"
 import { getItem, putItem, checkDynamoDbResult } from "../utils/dynamoDB"
 import { hasKeyGuard } from "../utils/keyGuard"
+import { gatewayResponse } from "../utils/gatewayResponse"
 
 const hasStateAndCode = (
 	value: unknown
@@ -15,13 +16,6 @@ const hasStateAndCode = (
 	const hasCode = hasKeyGuard(value, "code") && typeof value.code == "string"
 
 	return hasState && hasCode
-}
-
-const gatewayResponse = (
-	code: number,
-	message: string
-): APIGatewayProxyResult => {
-	return { statusCode: code, body: message }
 }
 
 const fetchAndSaveTokens = async (
