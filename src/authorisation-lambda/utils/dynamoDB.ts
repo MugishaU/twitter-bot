@@ -37,6 +37,14 @@ const hasErrorInfo = (
 	return false
 }
 
+const formatTime = (time: number): number => {
+	if (time < 1) {
+		time = 1
+	}
+
+	return Math.floor(time)
+}
+
 const ddbClient = new DynamoDBClient({})
 
 export const getItem = async (
@@ -81,12 +89,13 @@ export const getItem = async (
 export const putItem = async (
 	tableName: string,
 	item: DynamoDbItem,
-	ttl = true
+	ttl = true,
+	hours = 168
 ): Promise<DynamoDbResult> => {
 	if (ttl) {
 		const unixTimestampNow = Math.floor(new Date().getTime() / 1000)
-		const sevenDaysInSeconds = 604800
-		const ttl = unixTimestampNow + sevenDaysInSeconds
+		const seconds = formatTime(hours) * 3600
+		const ttl = unixTimestampNow + seconds
 		item.ttl = ttl
 	}
 

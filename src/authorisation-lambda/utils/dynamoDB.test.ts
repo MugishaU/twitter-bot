@@ -135,6 +135,72 @@ describe("putItem", () => {
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
+	it("should successfully put item into DynamoDb with a custom ttl", async () => {
+		ddbMock
+			.on(PutItemCommand, {
+				TableName: "test-table",
+				Item: {
+					id: {
+						S: "0"
+					},
+					foo: {
+						S: "bar"
+					},
+					ttl: { N: "1629511200" }
+				}
+			})
+			.resolves({
+				$metadata: { httpStatusCode: 200 }
+			})
+
+		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 2)
+		expect(item).toStrictEqual({ statusCode: 200 })
+	})
+
+	it("should successfully put item into DynamoDb with a minimum ttl of an hour", async () => {
+		ddbMock
+			.on(PutItemCommand, {
+				TableName: "test-table",
+				Item: {
+					id: {
+						S: "0"
+					},
+					foo: {
+						S: "bar"
+					},
+					ttl: { N: "1629507600" }
+				}
+			})
+			.resolves({
+				$metadata: { httpStatusCode: 200 }
+			})
+
+		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 0)
+		expect(item).toStrictEqual({ statusCode: 200 })
+	})
+
+	it("should successfully put item into DynamoDb with ttl in one-hour increments", async () => {
+		ddbMock
+			.on(PutItemCommand, {
+				TableName: "test-table",
+				Item: {
+					id: {
+						S: "0"
+					},
+					foo: {
+						S: "bar"
+					},
+					ttl: { N: "1629514800" }
+				}
+			})
+			.resolves({
+				$metadata: { httpStatusCode: 200 }
+			})
+
+		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 3.5)
+		expect(item).toStrictEqual({ statusCode: 200 })
+	})
+
 	it("should successfully put item into DynamoDb without ttl", async () => {
 		ddbMock
 			.on(PutItemCommand, {

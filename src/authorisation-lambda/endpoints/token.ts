@@ -50,10 +50,15 @@ const fetchAndSaveTokens = async (
 			if (hasKeyGuard(result, "data")) {
 				const accessToken: string = result.data.access_token
 				const refreshToken: string = result.data.refresh_token
-				const accessTokenSave = putItem("twitter-auth", {
-					id: "accessToken",
-					value: accessToken
-				})
+				const accessTokenSave = putItem(
+					"twitter-auth",
+					{
+						id: "accessToken",
+						value: accessToken
+					},
+					true,
+					2
+				)
 				const refreshTokenSave = putItem("twitter-auth", {
 					id: "refreshToken",
 					value: refreshToken
