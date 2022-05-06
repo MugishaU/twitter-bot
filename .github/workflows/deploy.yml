@@ -101,6 +101,8 @@ jobs:
 
       - name: Terraform Plan
         id: plan
+        env:
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
         run: terraform plan -no-color
         continue-on-error: true
 
@@ -140,6 +142,8 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
         run: terraform apply -auto-approve
 
   lambda:
@@ -210,4 +214,6 @@ jobs:
         run: terraform init
 
       - name: Terraform Refresh
+        env:
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
         run: terraform apply -refresh-only -auto-approve
