@@ -37,7 +37,7 @@ export const handler = async (
 				}
 				break
 			case "POST /refresh":
-				console.log("refresh endpoint called..")
+				console.log("refresh endpoint called.")
 				const refreshResult = await refresh()
 
 				statusCode = refreshResult.statusCode
