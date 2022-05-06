@@ -38,92 +38,18 @@ describe("token", () => {
 		})
 	})
 
-	it("should fail if the Access or Refresh token fail to save to DynamoDb", async () => {
-		jest
-			.spyOn(dynamoDB, "getItem")
-			.mockResolvedValueOnce({
-				statusCode: 200,
-				body: { id: "state", value: "state" }
-			})
-			.mockResolvedValueOnce({
-				statusCode: 200,
-				body: { id: "codeVerifier", value: "codeVerifier" }
-			})
+	it("should fail if the state or code isn't present in the callback query parameters", async () => {
+		const resultNoState = await token({ code: "code" })
+		const resultNoCode = await token({ state: "state" })
 
-		axiosMock.post.mockResolvedValueOnce({
-			status: 200,
-			data: { access_token: "accessToken", refresh_token: "refreshToken" }
+		expect(resultNoCode).toStrictEqual({
+			statusCode: 404,
+			body: "State and/or code not provided."
 		})
 
-		jest
-			.spyOn(dynamoDB, "putItem")
-			.mockResolvedValueOnce({ statusCode: 200 })
-			.mockResolvedValueOnce({ statusCode: 500 })
-
-		const result = await token({ state: "state", code: "code" })
-
-		expect(result).toStrictEqual({
-			statusCode: 500,
-			body: "Error saving Access Token and Refresh Token to authorisation server."
-		})
-	})
-
-	it("should fail if the Twitter API returns no data", async () => {
-		jest
-			.spyOn(dynamoDB, "getItem")
-			.mockResolvedValueOnce({
-				statusCode: 200,
-				body: { id: "state", value: "state" }
-			})
-			.mockResolvedValueOnce({
-				statusCode: 200,
-				body: { id: "codeVerifier", value: "codeVerifier" }
-			})
-
-		axiosMock.post.mockResolvedValueOnce({
-			status: 200
-		})
-
-		const result = await token({ state: "state", code: "code" })
-
-		expect(result).toStrictEqual({
-			statusCode: 500,
-			body: "No data received from server."
-		})
-	})
-
-	it("should fail if the authorization code passed is invalid", async () => {
-		jest.spyOn(dynamoDB, "getItem").mockResolvedValue({
-			statusCode: 200,
-			body: { id: "state", value: "state" }
-		})
-
-		axiosMock.post.mockRejectedValue({
-			response: {
-				status: 400
-			},
-			message: "Request failed with status 400."
-		})
-
-		const result = await token({ state: "state", code: "code" })
-
-		expect(result).toStrictEqual({
-			statusCode: 400,
-			body: "Request failed with status 400."
-		})
-	})
-
-	it("should fail if the states don't match", async () => {
-		jest.spyOn(dynamoDB, "getItem").mockResolvedValue({
-			statusCode: 200,
-			body: { id: "state", value: "state" }
-		})
-
-		const result = await token({ state: "wrongState", code: "code" })
-
-		expect(result).toStrictEqual({
-			statusCode: 400,
-			body: "State does not match authorisation server."
+		expect(resultNoState).toStrictEqual({
+			statusCode: 404,
+			body: "State and/or code not provided."
 		})
 	})
 
@@ -159,18 +85,17 @@ describe("token", () => {
 		})
 	})
 
-	it("should fail if the state or code isn't present in the callback query parameters", async () => {
-		const resultNoState = await token({ code: "code" })
-		const resultNoCode = await token({ state: "state" })
-
-		expect(resultNoCode).toStrictEqual({
-			statusCode: 404,
-			body: "State and/or code not provided."
+	it("should fail if the states don't match", async () => {
+		jest.spyOn(dynamoDB, "getItem").mockResolvedValue({
+			statusCode: 200,
+			body: { id: "state", value: "state" }
 		})
 
-		expect(resultNoState).toStrictEqual({
-			statusCode: 404,
-			body: "State and/or code not provided."
+		const result = await token({ state: "wrongState", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 400,
+			body: "State does not match authorisation server."
 		})
 	})
 
@@ -198,6 +123,60 @@ describe("token", () => {
 		expect(result).toStrictEqual({
 			statusCode: 500,
 			body: "Generic Axios Error Message"
+		})
+	})
+
+	it("should fail if the Twitter API returns no data", async () => {
+		jest
+			.spyOn(dynamoDB, "getItem")
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "state", value: "state" }
+			})
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "codeVerifier", value: "codeVerifier" }
+			})
+
+		axiosMock.post.mockResolvedValueOnce({
+			status: 200
+		})
+
+		const result = await token({ state: "state", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 500,
+			body: "No data received from server."
+		})
+	})
+
+	it("should fail if the Access or Refresh token fail to save to DynamoDb", async () => {
+		jest
+			.spyOn(dynamoDB, "getItem")
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "state", value: "state" }
+			})
+			.mockResolvedValueOnce({
+				statusCode: 200,
+				body: { id: "codeVerifier", value: "codeVerifier" }
+			})
+
+		axiosMock.post.mockResolvedValueOnce({
+			status: 200,
+			data: { access_token: "accessToken", refresh_token: "refreshToken" }
+		})
+
+		jest
+			.spyOn(dynamoDB, "putItem")
+			.mockResolvedValueOnce({ statusCode: 200 })
+			.mockResolvedValueOnce({ statusCode: 500 })
+
+		const result = await token({ state: "state", code: "code" })
+
+		expect(result).toStrictEqual({
+			statusCode: 500,
+			body: "Error saving Access Token and Refresh Token to authorisation server."
 		})
 	})
 })
