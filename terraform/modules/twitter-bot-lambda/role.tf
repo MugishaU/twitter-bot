@@ -53,23 +53,3 @@ data "aws_iam_policy_document" "cloudwatch-policy-document" {
     ]
   }
 }
-
-# resource "aws_iam_policy_attachment" "twitter-auth-api-gateway-policy-attachment" {
-#   name       = "twitter-auth-api-gateway"
-#   roles      = []
-#   policy_arn = aws_iam_policy.twitter-auth-api-gateway-policy.arn
-# }
-
-# resource "aws_iam_policy" "twitter-auth-api-gateway-policy" {
-#   name   = "twitter-auth-api-gateway-policy"
-#   policy = data.aws_iam_policy_document.twitter-auth-api-gateway-policy-document.json
-# }
-
-# data "aws_iam_policy_document" "twitter-auth-api-gateway-policy-document" {
-#   statement {
-#     sid       = "InvokeAPIGateway"
-#     effect    = "Allow"
-#     actions   = ["execute-api:Invoke"]
-#     resources = ["${aws_apigatewayv2_api.twitter-auth-api-gateway.execution_arn}/*"]
-#   }
-# }
