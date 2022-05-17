@@ -180,8 +180,8 @@ jobs:
           npm install
           npm run deploy-lambda
         shell: bash
-    
-    lambda-2:
+
+  lambda-2:
     needs: terraform
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     name: "Update Twitter Bot Lambda"
