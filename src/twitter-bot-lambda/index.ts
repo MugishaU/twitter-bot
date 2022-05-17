@@ -15,5 +15,5 @@ export const handler = async (
 	event: EventBridgeEvent<string, string>
 ): Promise<any> => {
 	console.log(`Lambda Invoked. Payload: ${event.detail}`)
-	return event.detail
+	return "done"
 }
