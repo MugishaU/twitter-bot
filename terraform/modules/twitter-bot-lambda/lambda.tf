@@ -6,11 +6,3 @@ resource "aws_lambda_function" "twitter-bot-lambda" {
   runtime       = "nodejs14.x"
   timeout       = 60
 }
-
-resource "aws_lambda_permission" "eventbridge-lambda-permission" {
-  statement_id  = "EventbridgeToLambda"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.twitter-bot-lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:events:eu-west-2:${data.aws_caller_identity.current.account_id}:rule/twitter*"
-}
