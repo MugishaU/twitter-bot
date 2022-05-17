@@ -27,6 +27,10 @@ module "authorisation-lambda" {
   CLIENT_SECRET = var.CLIENT_SECRET
 }
 
+module "twitter-bot-lambda" {
+  source = "./modules/twitter-bot-lambda"
+}
+
 module "dynamoDB" {
   source = "./modules/dynamoDB"
 }

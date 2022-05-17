@@ -32,7 +32,7 @@ zip -r -q ${ZIP_NAME}.zip .
 
 report_status $? "Deployment package zip file creation successful!" "Deployment package zip file creation failed."
 
-aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip | jq '.Environment = "REDACTED"'
+aws lambda update-function-code --function-name ${FUNCTION_NAME} --zip-file fileb://${ZIP_NAME}.zip | jq '.Environment = "***"'
 
 TRIES=20
 STATE=$(aws lambda get-function --function-name ${FUNCTION_NAME} --query 'Configuration.LastUpdateStatus' | jq -r)
