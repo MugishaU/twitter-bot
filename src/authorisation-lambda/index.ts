@@ -36,7 +36,7 @@ export const handler = async (
 					body = "State and/or code not provided."
 				}
 				break
-			case "POST /refresh":
+			case "GET /refresh":
 				console.log("refresh endpoint called.")
 				const refreshResult = await refresh()
 
