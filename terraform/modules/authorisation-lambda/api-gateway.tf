@@ -34,7 +34,7 @@ resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-token-route" {
 
 resource "aws_apigatewayv2_route" "twitter-auth-api-gateway-refresh-route" {
   api_id             = aws_apigatewayv2_api.twitter-auth-api-gateway.id
-  route_key          = "POST /refresh"
+  route_key          = "GET /refresh"
   target             = "integrations/${aws_apigatewayv2_integration.twitter-auth-api-gateway-lambda-integration.id}"
   authorization_type = "AWS_IAM"
 }
