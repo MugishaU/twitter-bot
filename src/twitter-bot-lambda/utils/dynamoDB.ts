@@ -12,12 +12,14 @@ interface DynamoDbPrimaryKey {
 }
 
 interface DynamoDbItem {
-	[key: string]: string | number | boolean
+	id: string
+	value: string
+	ttl?: number
 }
 
 interface DynamoDbResult {
 	statusCode: number
-	body?: { [key: string]: string | number | boolean }
+	body?: DynamoDbItem
 	errorMessage?: string
 }
 
@@ -132,14 +134,14 @@ export const putItem = async (
 	}
 }
 
-export const checkDynamoDbResult = (item: DynamoDbResult): string | null => {
-	if (
-		item.statusCode == 200 &&
-		hasKeyGuard(item, "body") &&
-		hasKeyGuard(item.body, "value") &&
-		typeof item.body.value == "string"
-	) {
-		return item.body.value
-	}
-	return null
-}
+// export const checkDynamoDbResult = (item: DynamoDbResult): DynamoDbItem | null => {
+// 	if (
+// 		item.statusCode == 200 &&
+// 		hasKeyGuard(item, "body") &&
+// 		typeof item.body == "object" &&
+// 		Object.keys(item.body).length > 0
+// 	) {
+// 		return item.body
+// 	}
+// 	return null
+// }
