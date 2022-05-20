@@ -62,16 +62,33 @@ export const getItem = async (
 		const data: GetItemCommandOutput = await ddbClient.send(
 			new GetItemCommand(params)
 		)
+
 		const response: DynamoDbResult = {
 			statusCode: data.$metadata.httpStatusCode || 500,
-			body: data.Item ? unmarshall(data.Item) : undefined
 		}
+
+		if (data.Item) {
+			const item = unmarshall(data.Item)
+
+			if (hasKeyGuard(item, "id") &&
+				typeof item.id == "string" &&
+				hasKeyGuard(item, "value") &&
+				typeof item.value == "string") {
+
+				response.body = { id: item.id, value: item.value }
+
+				if (hasKeyGuard(item, "ttl") && typeof item.ttl == "number") {
+					response.body.ttl = item.ttl
+				}
+			}
+		}
+
 		return response
+
 	} catch (error) {
-		console.log(`ERROR: ${error}`)
 		if (hasErrorInfo(error)) {
 			const errorResponse: DynamoDbResult = {
-				statusCode: error.$metadata.httpStatusCode,
+				statusCode: error.$metadata.httpStatusCode || 500,
 				errorMessage: error.message
 			}
 
@@ -117,7 +134,7 @@ export const putItem = async (
 	} catch (error) {
 		if (hasErrorInfo(error)) {
 			const errorResponse: DynamoDbResult = {
-				statusCode: error.$metadata.httpStatusCode,
+				statusCode: error.$metadata.httpStatusCode || 500,
 				errorMessage: error.message
 			}
 
@@ -134,14 +151,13 @@ export const putItem = async (
 	}
 }
 
-// export const checkDynamoDbResult = (item: DynamoDbResult): DynamoDbItem | null => {
-// 	if (
-// 		item.statusCode == 200 &&
-// 		hasKeyGuard(item, "body") &&
-// 		typeof item.body == "object" &&
-// 		Object.keys(item.body).length > 0
-// 	) {
-// 		return item.body
-// 	}
-// 	return null
-// }
+export const checkDynamoDbResult = (item: DynamoDbResult): DynamoDbItem | null => {
+	if (
+		item.statusCode == 200 &&
+		hasKeyGuard(item, "body") &&
+		typeof item.body == "object"
+	) {
+		return item.body
+	}
+	return null
+}
