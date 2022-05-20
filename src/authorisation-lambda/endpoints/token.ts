@@ -42,7 +42,7 @@ const fetchAndSaveTokens = async (
 				client_id: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ",
 				redirect_uri:
 					"https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/token",
-				code_verifier: codeVerifier
+				code_verifier: codeVerifier.value
 			})
 
 			const result = await axios.post(url, body, config)
@@ -106,7 +106,7 @@ export const token = async (
 		const dynamoDbState = checkDynamoDbResult(dynamoDbResult)
 
 		if (dynamoDbState) {
-			if (queryParamState == dynamoDbState) {
+			if (queryParamState == dynamoDbState.value) {
 				const tokenResult = await fetchAndSaveTokens(queryParams.code)
 				return tokenResult
 			} else {
