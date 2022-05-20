@@ -311,7 +311,7 @@ describe("checkDynamoDbResult", () => {
 			body: { id: "foo", value: "bar" }
 		}
 		const itemValue = checkDynamoDbResult(result)
-		expect(itemValue).toBe({ id: "foo", value: "bar" })
+		expect(itemValue).toStrictEqual({ id: "foo", value: "bar" })
 	})
 
 	it("should return null if the DynamoDB call failed", () => {
