@@ -23,7 +23,7 @@ export const refresh = async (): Promise<APIGatewayProxyResult> => {
 			}
 
 			const body = qs.stringify({
-				refresh_token: refreshToken,
+				refresh_token: refreshToken.value,
 				grant_type: "refresh_token",
 				client_id: "OGVKMXcwWVdsdS1pVkRlZjNVQlM6MTpjaQ"
 			})

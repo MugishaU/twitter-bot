@@ -29,8 +29,8 @@ describe("getItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					}
 				},
 				$metadata: { httpStatusCode: 200 }
@@ -38,11 +38,43 @@ describe("getItem", () => {
 		const item = await getItem("test-table", { id: "0" })
 		expect(item).toStrictEqual({
 			statusCode: 200,
-			body: { id: "0", foo: "bar" }
+			body: { id: "0", value: "foo" }
 		})
 	})
 
-	it("should successfully return undefined if not in DynamoDb", async () => {
+
+	it("should successfully return the item with ttl info if in DynamoDb", async () => {
+		ddbMock
+			.on(GetItemCommand, {
+				TableName: "test-table",
+				Key: {
+					id: {
+						S: "0"
+					}
+				}
+			})
+			.resolves({
+				Item: {
+					id: {
+						S: "0"
+					},
+					value: {
+						S: "foo"
+					},
+					ttl: {
+						N: "1630108800"
+					}
+				},
+				$metadata: { httpStatusCode: 200 }
+			})
+		const item = await getItem("test-table", { id: "0" })
+		expect(item).toStrictEqual({
+			statusCode: 200,
+			body: { id: "0", value: "foo", ttl: 1630108800 }
+		})
+	})
+
+	it("should successfully return no body if not in DynamoDb", async () => {
 		ddbMock
 			.on(GetItemCommand, {
 				TableName: "test-table",
@@ -56,7 +88,7 @@ describe("getItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 		const item = await getItem("test-table", { id: "0" })
-		expect(item).toStrictEqual({ statusCode: 200, body: undefined })
+		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
 	it("should return a defined error correctly", async () => {
@@ -121,8 +153,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1630108800" }
 				}
@@ -131,7 +163,7 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" })
+		const item = await putItem("test-table", { id: "0", value: "foo" })
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -143,8 +175,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1629511200" }
 				}
@@ -153,7 +185,7 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 2)
+		const item = await putItem("test-table", { id: "0", value: "foo" }, true, 2)
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -165,8 +197,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1629507600" }
 				}
@@ -175,7 +207,7 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 0)
+		const item = await putItem("test-table", { id: "0", value: "foo" }, true, 0)
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -187,8 +219,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1629514800" }
 				}
@@ -197,7 +229,7 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" }, true, 3.5)
+		const item = await putItem("test-table", { id: "0", value: "foo" }, true, 3.5)
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -209,8 +241,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					}
 				}
 			})
@@ -218,7 +250,7 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" }, false)
+		const item = await putItem("test-table", { id: "0", value: "foo" }, false)
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -230,8 +262,8 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1630108800" }
 				}
@@ -241,7 +273,7 @@ describe("putItem", () => {
 				message: "Requested resource not found"
 			})
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" })
+		const item = await putItem("test-table", { id: "0", value: "foo" })
 		expect(item).toStrictEqual({
 			statusCode: 400,
 			errorMessage: "Requested resource not found"
@@ -256,15 +288,15 @@ describe("putItem", () => {
 					id: {
 						S: "0"
 					},
-					foo: {
-						S: "bar"
+					value: {
+						S: "foo"
 					},
 					ttl: { N: "1630108800" }
 				}
 			})
 			.rejects()
 
-		const item = await putItem("test-table", { id: "0", foo: "bar" })
+		const item = await putItem("test-table", { id: "0", value: "foo" })
 		expect(item).toStrictEqual({
 			statusCode: 500,
 			errorMessage: "Undefined Error"
@@ -279,7 +311,7 @@ describe("checkDynamoDbResult", () => {
 			body: { id: "foo", value: "bar" }
 		}
 		const itemValue = checkDynamoDbResult(result)
-		expect(itemValue).toBe("bar")
+		expect(itemValue).toStrictEqual({ id: "foo", value: "bar" })
 	})
 
 	it("should return null if the DynamoDB call failed", () => {
@@ -294,7 +326,6 @@ describe("checkDynamoDbResult", () => {
 	it("should return null if the DynamoDB call returns no item", () => {
 		const result = {
 			statusCode: 200,
-			body: {}
 		}
 		const itemValue = checkDynamoDbResult(result)
 		expect(itemValue).toBeNull()
