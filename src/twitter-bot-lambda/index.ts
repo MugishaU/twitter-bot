@@ -1,4 +1,4 @@
-import { EventBridgeEvent, APIGatewayProxyResult } from "aws-lambda"
+import { APIGatewayProxyResult } from "aws-lambda"
 import { checkDynamoDbResult, getItem } from "./utils/dynamoDB"
 import { fetchTweets } from "./utils/twitter"
 
@@ -12,10 +12,12 @@ import { fetchTweets } from "./utils/twitter"
 // 	fetchTweets(query).then((x) => console.log(x))
 // }
 
-export const handler = async (
-	event: EventBridgeEvent<string, string>
-): Promise<any> => {
-	console.log(`Lambda Invoked. Payload: ${event.detail}`)
+interface CloudWatchEvent {
+	query: string
+}
+
+export const handler = async (event: CloudWatchEvent): Promise<any> => {
+	console.log(`Lambda Invoked. Payload: ${event.query}`)
 	return "done"
 }
 
