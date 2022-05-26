@@ -7,7 +7,7 @@ resource "aws_cloudwatch_event_rule" "cron-job" {
 resource "aws_cloudwatch_event_target" "cron-json" {
   rule  = aws_cloudwatch_event_rule.cron-job.name
   arn   = var.lambda-arn
-  input = jsonencode({ "detail" : "${var.query}" })
+  input = jsonencode({ "query" : "${var.query}" })
 }
 
 resource "aws_lambda_permission" "lambda-trigger" {
