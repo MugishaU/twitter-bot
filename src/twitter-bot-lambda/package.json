@@ -42,7 +42,8 @@
 		"testEnvironment": "node",
 		"collectCoverage": true,
 		"collectCoverageFrom": [
-			"./utils/**"
+			"./utils/**",
+			"./functions/**"
 		],
 		"coverageThreshold": {
 			"global": {
