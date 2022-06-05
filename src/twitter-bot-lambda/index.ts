@@ -1,5 +1,5 @@
-import { EventBridgeEvent, APIGatewayProxyResult } from "aws-lambda"
 import { fetchTweets } from "./utils/twitter"
+
 
 // const queries = [
 // 	"%23BlackInTech apply now -is:retweet",
@@ -11,9 +11,10 @@ import { fetchTweets } from "./utils/twitter"
 // 	fetchTweets(query).then((x) => console.log(x))
 // }
 
-export const handler = async (
-	event: EventBridgeEvent<string, string>
-): Promise<any> => {
-	console.log(`Lambda Invoked. Payload: ${event.detail}`)
-	return "done"
+interface CloudWatchEvent {
+	query: string
+}
+
+export const handler = async (event: CloudWatchEvent): Promise<void> => {
+	console.log(`Lambda Invoked. Payload: ${event.query}`)
 }

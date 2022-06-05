@@ -64,17 +64,18 @@ export const getItem = async (
 		)
 
 		const response: DynamoDbResult = {
-			statusCode: data.$metadata.httpStatusCode || 500,
+			statusCode: data.$metadata.httpStatusCode || 500
 		}
 
 		if (data.Item) {
 			const item = unmarshall(data.Item)
 
-			if (hasKeyGuard(item, "id") &&
+			if (
+				hasKeyGuard(item, "id") &&
 				typeof item.id == "string" &&
 				hasKeyGuard(item, "value") &&
-				typeof item.value == "string") {
-
+				typeof item.value == "string"
+			) {
 				response.body = { id: item.id, value: item.value }
 
 				if (hasKeyGuard(item, "ttl") && typeof item.ttl == "number") {
@@ -84,7 +85,6 @@ export const getItem = async (
 		}
 
 		return response
-
 	} catch (error) {
 		if (hasErrorInfo(error)) {
 			const errorResponse: DynamoDbResult = {
@@ -151,12 +151,19 @@ export const putItem = async (
 	}
 }
 
-export const checkDynamoDbResult = (item: DynamoDbResult): DynamoDbItem | null => {
+export const checkDynamoDbResult = (
+	item: DynamoDbResult
+): DynamoDbItem | null => {
 	if (
 		item.statusCode == 200 &&
 		hasKeyGuard(item, "body") &&
 		typeof item.body == "object"
 	) {
+		if (item.body.ttl) {
+			const condition = item.body.ttl > Math.floor(new Date().getTime() / 1000)
+			return condition ? item.body : null
+		}
+
 		return item.body
 	}
 	return null
