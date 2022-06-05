@@ -1,5 +1,9 @@
 import * as auth from "./authorisation"
 import * as dynamoDB from "../utils/dynamoDB"
+import axios from "axios"
+
+jest.mock("axios")
+const axiosMock = axios as jest.Mocked<typeof axios>
 
 describe("getToken", () => {
 	beforeEach(() => {
@@ -67,7 +71,38 @@ describe("getToken", () => {
 	})
 })
 
-//refreshToken
-//Refresh is successful
-//Refresh is not successful with defined error
-//Refresh is not successful with undefined error
+describe("fetchToken", () => {
+	beforeAll(() => {
+		jest.restoreAllMocks()
+	})
+
+	beforeEach(() => {
+		jest.clearAllMocks()
+		jest.resetAllMocks()
+	})
+
+	it("should return 200 if successful", async () => {
+		axiosMock.get.mockResolvedValue({
+			status: 200
+		})
+
+		const result = await auth.refreshToken()
+		expect(result).toBe(200)
+	})
+
+	it("should fail with defined error if available", async () => {
+		axiosMock.get.mockRejectedValue({
+			response: { status: 403 }
+		})
+
+		const result = await auth.refreshToken()
+		expect(result).toBe(403)
+	})
+
+	it("should fail with generic error if no defined error is available", async () => {
+		axiosMock.get.mockRejectedValue({})
+
+		const result = await auth.refreshToken()
+		expect(result).toBe(500)
+	})
+})
