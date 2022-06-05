@@ -42,7 +42,6 @@ describe("getItem", () => {
 		})
 	})
 
-
 	it("should successfully return the item with ttl info if in DynamoDb", async () => {
 		ddbMock
 			.on(GetItemCommand, {
@@ -229,7 +228,12 @@ describe("putItem", () => {
 				$metadata: { httpStatusCode: 200 }
 			})
 
-		const item = await putItem("test-table", { id: "0", value: "foo" }, true, 3.5)
+		const item = await putItem(
+			"test-table",
+			{ id: "0", value: "foo" },
+			true,
+			3.5
+		)
 		expect(item).toStrictEqual({ statusCode: 200 })
 	})
 
@@ -305,19 +309,32 @@ describe("putItem", () => {
 })
 
 describe("checkDynamoDbResult", () => {
-	it("should return the dynamoDb item if retrieved successfully", () => {
-		const result = {
-			statusCode: 200,
-			body: { id: "foo", value: "bar" }
-		}
-		const itemValue = checkDynamoDbResult(result)
-		expect(itemValue).toStrictEqual({ id: "foo", value: "bar" })
+	beforeAll(() => {
+		jest.useFakeTimers()
+		jest.setSystemTime(new Date(2021, 7, 21))
 	})
 
-	it("should return null if the DynamoDB call failed", () => {
+	afterAll(() => {
+		jest.useRealTimers()
+	})
+
+	it("should return the DynamoDb item if retrieved successfully and it hasn't expired", () => {
 		const result = {
-			statusCode: 400,
-			errorMessage: "Requested resource not found"
+			statusCode: 200,
+			body: { id: "foo", value: "bar", ttl: 1640995200 }
+		}
+		const itemValue = checkDynamoDbResult(result)
+		expect(itemValue).toStrictEqual({
+			id: "foo",
+			value: "bar",
+			ttl: 1640995200
+		})
+	})
+
+	it("should return null if the DynamoDB item has expired", () => {
+		const result = {
+			statusCode: 200,
+			body: { id: "foo", value: "bar", ttl: 1625094000 }
 		}
 		const itemValue = checkDynamoDbResult(result)
 		expect(itemValue).toBeNull()
@@ -325,7 +342,16 @@ describe("checkDynamoDbResult", () => {
 
 	it("should return null if the DynamoDB call returns no item", () => {
 		const result = {
-			statusCode: 200,
+			statusCode: 200
+		}
+		const itemValue = checkDynamoDbResult(result)
+		expect(itemValue).toBeNull()
+	})
+
+	it("should return null if the DynamoDB call failed", () => {
+		const result = {
+			statusCode: 400,
+			errorMessage: "Requested resource not found"
 		}
 		const itemValue = checkDynamoDbResult(result)
 		expect(itemValue).toBeNull()
