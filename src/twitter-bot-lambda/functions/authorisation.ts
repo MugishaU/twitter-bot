@@ -7,12 +7,9 @@ export const getToken = async (): Promise<string> => {
 	const accessTokenItem = checkDynamoDbResult(dynamoDbResult)
 	let accessToken: string = ""
 
-	if (
-		!accessTokenItem ||
-		(accessTokenItem.ttl &&
-			accessTokenItem.ttl < Math.floor(new Date().getTime() / 1000))
-	) {
+	if (!accessTokenItem) {
 		const refreshTokenResult = await refreshToken()
+
 		if (refreshTokenResult == 200) {
 			const dynamoDbResult = await getItem("twitter-auth", {
 				id: "accessToken"
