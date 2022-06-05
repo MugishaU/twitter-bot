@@ -5,12 +5,6 @@ jest.mock("axios")
 const axiosMock = axios as jest.Mocked<typeof axios>
 
 describe("fetchTweets", () => {
-	beforeAll(() => {
-		process.env = Object.assign(process.env, {
-			TWITTER_BEARER_TOKEN: "test-bearer-token"
-		})
-	})
-
 	beforeEach(() => {
 		jest.clearAllMocks()
 		jest.restoreAllMocks()
@@ -22,7 +16,7 @@ describe("fetchTweets", () => {
 			data: { data: [{ id: "0", text: "foo" }] }
 		})
 
-		const result = await fetchTweets("bar")
+		const result = await fetchTweets("bar", "test-bearer-token")
 
 		expect(axiosMock.get).toHaveBeenCalledWith(
 			"https://api.twitter.com/2/tweets/search/recent?max_results=50&query=bar",
@@ -41,7 +35,7 @@ describe("fetchTweets", () => {
 			data: {}
 		})
 
-		const result = await fetchTweets("bar")
+		const result = await fetchTweets("bar", "test-bearer-token")
 
 		expect(axiosMock.get).toHaveBeenCalledWith(
 			"https://api.twitter.com/2/tweets/search/recent?max_results=50&query=bar",
@@ -59,7 +53,7 @@ describe("fetchTweets", () => {
 			message: "Request failed with status code 404"
 		})
 
-		const result = await fetchTweets("bar")
+		const result = await fetchTweets("bar", "test-bearer-token")
 
 		expect(axiosMock.get).toHaveBeenCalledWith(
 			"https://api.twitter.com/2/tweets/search/recent?max_results=50&query=bar",
@@ -74,7 +68,7 @@ describe("fetchTweets", () => {
 	it("should return an undefined error correctly", async () => {
 		axiosMock.get.mockRejectedValue({})
 
-		const result = await fetchTweets("bar")
+		const result = await fetchTweets("bar", "test-bearer-token")
 
 		expect(axiosMock.get).toHaveBeenCalledWith(
 			"https://api.twitter.com/2/tweets/search/recent?max_results=50&query=bar",
@@ -88,12 +82,6 @@ describe("fetchTweets", () => {
 })
 
 describe("retweet", () => {
-	beforeAll(() => {
-		process.env = Object.assign(process.env, {
-			TWITTER_BEARER_TOKEN: "test-bearer-token"
-		})
-	})
-
 	beforeEach(() => {
 		jest.clearAllMocks()
 	})
