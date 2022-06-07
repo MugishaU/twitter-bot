@@ -87,7 +87,7 @@ describe("retweet", () => {
 	})
 
 	it("should just pass for now", () => {
-		const result = retweet("0")
+		const result = retweet("0", "test-bearer-token")
 		expect(true).toBe(true)
 	})
 })

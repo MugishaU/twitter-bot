@@ -49,12 +49,15 @@ export const fetchTweets = async (
 			statusCode: error.response.status || 500,
 			message: error.message || "Undefined Error"
 		}
-		console.log(response)
 	} finally {
 		return response
 	}
 }
 
-export const retweet = (id: string): void => {
+export const retweet = async (
+	id: string,
+	bearerToken: string
+): Promise<number> => {
 	console.log(id)
+	return 200
 }
