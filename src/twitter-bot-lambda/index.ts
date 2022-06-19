@@ -1,6 +1,6 @@
 import { fetchTweets, retweet } from "./utils/twitter"
 import { getToken } from "./functions/authorisation"
-import { putItem } from "./utils/dynamoDB"
+import { getItem, putItem, checkDynamoDbResult } from "./utils/dynamoDB"
 
 // const queries = [
 // 	"%23BlackInTech apply now -is:retweet",
@@ -24,14 +24,18 @@ export const handler = async (event: CloudWatchEvent): Promise<void> => {
 
 	if (searchResult.tweets) {
 		for (const tweet of searchResult.tweets) {
-			//Check if tweet id is in history
-			//if not, retweet & put in history
-			//if yes then skip
-			const saveTweet = await putItem("twitter-history", {
-				id: tweet.id,
-				value: tweet.text
-			})
-			console.log(saveTweet.statusCode)
+			const dynamoDBItem = await getItem("twitter-history", { id: tweet.id })
+			const historicTweet = checkDynamoDbResult(dynamoDBItem)
+
+			if (!historicTweet) {
+				//retweet
+				await putItem("twitter-history", {
+					id: tweet.id,
+					value: tweet.text
+				})
+			} else {
+				console.log(`Tweet with id: ${tweet.id} has already been retweeted`)
+			}
 		}
 	}
 }
