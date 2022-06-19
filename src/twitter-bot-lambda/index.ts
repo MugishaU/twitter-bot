@@ -24,6 +24,9 @@ export const handler = async (event: CloudWatchEvent): Promise<void> => {
 
 	if (searchResult.tweets) {
 		for (const tweet of searchResult.tweets) {
+			//Check if tweet id is in history
+			//if not, retweet & put in history
+			//if yes then skip
 			const saveTweet = await putItem("twitter-history", {
 				id: tweet.id,
 				value: tweet.text
