@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_iam_policy_attachment" "dynamoDB-read-write-access-policy-attachment" {
   name       = "dynamoDB-read-write-access"
-  roles      = [var.authorisation-lambda-iam-role-name]
+  roles      = [var.authorisation-lambda-iam-role-name, var.twitter-bot-lambda-iam-role-name]
   policy_arn = aws_iam_policy.dynamoDB-read-write-access-policy.arn
 }
 

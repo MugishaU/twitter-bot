@@ -77,3 +77,10 @@ export const retweet = async (
 		return error.response.status || 500
 	}
 }
+
+export const tweet = async (
+	text: string,
+	bearerToken: string
+): Promise<number> => {
+	return 200
+}
