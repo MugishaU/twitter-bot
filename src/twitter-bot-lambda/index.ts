@@ -28,11 +28,15 @@ export const handler = async (event: CloudWatchEvent): Promise<void> => {
 			const historicTweet = checkDynamoDbResult(dynamoDBItem)
 
 			if (!historicTweet) {
-				//retweet
-				await putItem("twitter-history", {
-					id: tweet.id,
-					value: tweet.text
-				})
+				const retweetResult = await retweet(tweet.id, bearerToken)
+				if (retweetResult == 200) {
+					await putItem("twitter-history", {
+						id: tweet.id,
+						value: tweet.text
+					})
+				} else {
+					console.error(`Retweeting tweet with id: ${tweet.id} failed`)
+				}
 			} else {
 				console.log(`Tweet with id: ${tweet.id} has already been retweeted`)
 			}
