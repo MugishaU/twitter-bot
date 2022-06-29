@@ -61,10 +61,10 @@ export const retweet = async (
 	const userId = "1485092360526704647"
 	const url = `https://api.twitter.com/2/users/${userId}/retweets`
 	const body = {
-		tweet_id : id
+		tweet_id: id
 	}
 	const options = {
-		headers : {
+		headers: {
 			Authorization: `BEARER ${bearerToken}`
 		}
 	}
@@ -76,5 +76,4 @@ export const retweet = async (
 		console.error(error.message)
 		return error.response.status || 500
 	}
-
 }
