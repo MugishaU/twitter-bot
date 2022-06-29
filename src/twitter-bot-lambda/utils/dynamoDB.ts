@@ -92,14 +92,14 @@ export const getItem = async (
 				errorMessage: error.message
 			}
 
-			console.log(errorResponse)
+			console.error(errorResponse)
 			return errorResponse
 		} else {
 			const genericErrorResponse: DynamoDbResult = {
 				statusCode: 500,
 				errorMessage: "Undefined Error"
 			}
-			console.log(genericErrorResponse)
+			console.error(genericErrorResponse)
 			return genericErrorResponse
 		}
 	}
@@ -138,14 +138,14 @@ export const putItem = async (
 				errorMessage: error.message
 			}
 
-			console.log(errorResponse)
+			console.error(errorResponse)
 			return errorResponse
 		} else {
 			const genericErrorResponse: DynamoDbResult = {
 				statusCode: 500,
 				errorMessage: "Undefined Error"
 			}
-			console.log(genericErrorResponse)
+			console.error(genericErrorResponse)
 			return genericErrorResponse
 		}
 	}

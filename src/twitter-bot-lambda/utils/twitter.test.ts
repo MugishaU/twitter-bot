@@ -81,13 +81,43 @@ describe("fetchTweets", () => {
 	})
 })
 
+// Pass
+// Fail
 describe("retweet", () => {
 	beforeEach(() => {
 		jest.clearAllMocks()
 	})
 
-	it("should just pass for now", () => {
-		const result = retweet("0")
-		expect(true).toBe(true)
+	it("should return 200 when successful", async () => {
+		axiosMock.post.mockResolvedValue({
+			status: 200,
+			data: {
+				data: {
+					retweeted: true
+				}
+			}
+		})
+		const result = await retweet("0", "test-bearer-token")
+		expect(result).toBe(200)
+	})
+
+	it("should return a defined error code if available when unsuccessful", async () => {
+		axiosMock.post.mockRejectedValue({
+			response: {
+				status: 403
+			},
+			message: "Request failed with status code 403"
+		})
+		const result = await retweet("0", "test-bearer-token")
+		expect(result).toBe(403)
+	})
+
+	it("should return a generic error code if available when unsuccessful", async () => {
+		axiosMock.post.mockRejectedValue({
+			response: {},
+			message: "Request failed with status code 403"
+		})
+		const result = await retweet("0", "test-bearer-token")
+		expect(result).toBe(500)
 	})
 })

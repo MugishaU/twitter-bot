@@ -30,7 +30,7 @@ export const fetchTweets = async (
 	}
 
 	try {
-		const axiosResponse: AxiosResponse = await axios.get(url, options)
+		const axiosResponse = await axios.get(url, options)
 
 		if (axiosResponse.data.data) {
 			response = {
@@ -49,12 +49,31 @@ export const fetchTweets = async (
 			statusCode: error.response.status || 500,
 			message: error.message || "Undefined Error"
 		}
-		console.log(response)
 	} finally {
 		return response
 	}
 }
 
-export const retweet = (id: string): void => {
-	console.log(id)
+export const retweet = async (
+	id: string,
+	bearerToken: string
+): Promise<number> => {
+	const userId = "1485092360526704647"
+	const url = `https://api.twitter.com/2/users/${userId}/retweets`
+	const body = {
+		tweet_id: id
+	}
+	const options = {
+		headers: {
+			Authorization: `BEARER ${bearerToken}`
+		}
+	}
+
+	try {
+		const axiosResponse = await axios.post(url, body, options)
+		return axiosResponse.status
+	} catch (error) {
+		console.error(error.message)
+		return error.response.status || 500
+	}
 }

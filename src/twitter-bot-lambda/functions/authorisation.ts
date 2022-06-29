@@ -32,12 +32,13 @@ export const refreshToken = async (): Promise<number> => {
 		service: "execute-api"
 	})
 
-	axios.interceptors.request.use(interceptor)
+	const awsSignedAxios = axios.create()
+	awsSignedAxios.interceptors.request.use(interceptor)
 
 	const url = "https://pw7fshn6z7.execute-api.eu-west-2.amazonaws.com/refresh"
 
 	try {
-		const axiosResponse = await axios.get(url)
+		const axiosResponse = await awsSignedAxios.get(url)
 		return axiosResponse.status
 	} catch (error) {
 		if (error.response) {

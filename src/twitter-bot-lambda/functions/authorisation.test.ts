@@ -71,7 +71,7 @@ describe("getToken", () => {
 	})
 })
 
-describe("fetchToken", () => {
+describe("refreshToken", () => {
 	beforeAll(() => {
 		jest.restoreAllMocks()
 	})
@@ -82,6 +82,7 @@ describe("fetchToken", () => {
 	})
 
 	it("should return 200 if successful", async () => {
+		axiosMock.create.mockReturnThis()
 		axiosMock.get.mockResolvedValue({
 			status: 200
 		})
@@ -91,6 +92,7 @@ describe("fetchToken", () => {
 	})
 
 	it("should fail with defined error if available", async () => {
+		axiosMock.create.mockReturnThis()
 		axiosMock.get.mockRejectedValue({
 			response: { status: 403 }
 		})
@@ -100,6 +102,7 @@ describe("fetchToken", () => {
 	})
 
 	it("should fail with generic error if no defined error is available", async () => {
+		axiosMock.create.mockReturnThis()
 		axiosMock.get.mockRejectedValue({})
 
 		const result = await auth.refreshToken()
