@@ -12,7 +12,7 @@ interface TweetFetchResponse {
 	tweets?: Tweet[]
 }
 
-export const fetchTweets = async (
+export const search = async (
 	searchTerm: string,
 	bearerToken: string
 ): Promise<TweetFetchResponse> => {
