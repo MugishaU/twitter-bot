@@ -12,7 +12,7 @@ interface TweetFetchResponse {
 	tweets?: Tweet[]
 }
 
-export const fetchTweets = async (
+export const search = async (
 	searchTerm: string,
 	bearerToken: string
 ): Promise<TweetFetchResponse> => {
@@ -76,4 +76,11 @@ export const retweet = async (
 		console.error(error.message)
 		return error.response.status || 500
 	}
+}
+
+export const tweet = async (
+	text: string,
+	bearerToken: string
+): Promise<number> => {
+	return 200
 }

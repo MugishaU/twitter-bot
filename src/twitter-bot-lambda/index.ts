@@ -1,4 +1,4 @@
-import { fetchTweets, retweet } from "./utils/twitter"
+import { search, retweet } from "./utils/twitter"
 import { getToken } from "./functions/authorisation"
 import { getItem, putItem, checkDynamoDbResult } from "./utils/dynamoDB"
 
@@ -10,8 +10,7 @@ export const handler = async (event: CloudWatchEvent): Promise<void> => {
 	console.log(`Lambda Invoked. Payload: ${event.query}`)
 	const bearerToken = await getToken()
 
-	const searchResult = await fetchTweets(event.query, bearerToken)
-
+	const searchResult = await search(event.query, bearerToken)
 	if (searchResult.tweets) {
 		for (const tweet of searchResult.tweets) {
 			const dynamoDBItem = await getItem("twitter-history", { id: tweet.id })

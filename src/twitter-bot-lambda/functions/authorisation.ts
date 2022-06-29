@@ -42,6 +42,7 @@ export const refreshToken = async (): Promise<number> => {
 		return axiosResponse.status
 	} catch (error) {
 		if (error.response) {
+			console.error(error)
 			return error.response.status
 		} else {
 			return 500
