@@ -48,7 +48,7 @@ The motivation behind this project was to build a full backend system encapsulat
 
 ---
 
-## Deployment
+## Continuous Deployment
 
 - Scripts
   - Obfuscating details, packaging app
@@ -65,6 +65,12 @@ The motivation behind this project was to build a full backend system encapsulat
 ## Future Improvements
 
 - tweets
+
+--
+
+## Contributing
+
+- details on how to contribute
 
 [circleci-badge]: https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml/badge.svg?branch=main
 [production-deployment]: https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml
