@@ -14,20 +14,30 @@ This project's infrastructure is hosted on AWS, with continuous deployment confi
 
 The motivation behind this project was to build a full backend system encapsulating application code, infrastructure as code, continuous deployment, security and testing whilst also hopefully providing value to others.
 
+[INSERT FULL ARCHITECTURE DIAGRAM HERE]
+
 ---
 
 ## Architecture
 
 ### Authorisation Lambda
 
+[SECTION IN PROGRESS]
+
 - diagram
-- link
-  auth flow (manual initial, refresh token, scopes)
+
+  auth endpoints (manual initial, refresh token, scopes)
+
+[INSERT DETAILED AUTHORISATION LAMBDA DIAGRAM HERE]
+
+- [Application code][auth-app-code]
+- [Infrastructure code][auth-infra-code]
 
 ### Twitter-bot Lambda
 
 - diagram
 - link
+- flow (manual start)
 
 ---
 
@@ -61,3 +71,7 @@ The motivation behind this project was to build a full backend system encapsulat
 [twitter-api]: https://developer.twitter.com/en/docs/twitter-api
 [twitter-profile]: https://twitter.com/BlackTechJobs
 [twitter-badge]: https://img.shields.io/twitter/url.svg?label=Follow%20%40BlackTechJobs&style=social&url=https%3A%2F%2Ftwitter.com%2FBlackTechJobs
+[auth-app-code]: ./src/authorisation-lambda
+[auth-infra-code]: ./terraform/modules/authorisation-lambda
+[twitter-app-code]: ./src/twitter-bot-lambda
+[twitter-infra-code]: ./terraform/modules/twitter-bot-lambda/
