@@ -10,25 +10,33 @@ This bot automates the [@BlackTechJobs][twitter-profile] Twitter page, with the 
 
 ## Overview
 
-- language
-- infra
-- deployment
-- Testing
+This project's infrastructure is hosted on AWS, with continuous deployment configured with Github Actions. The application is split into two main AWS Lambda functions, the authorisation lambda and the twitter-bot lambda. The [authorisation lambda](#authorisation-lambda) is responsible for authorising the application with OAuth 2.0 to act on behalf of [@BlackTechJobs][twitter-profile]. The [twitter-bot lambda](#twitter-bot-lambda) is responsible for carrying out actions via the Twitter API after authorisation.
+
+The motivation behind this project was to build a full backend system encapsulating application code, infrastructure as code, continuous deployment, security and testing whilst also hopefully providing value to others.
+
+---
 
 ## Architecture
 
-- Overview
-- Authentication Lambda
-  - diagram
-  - link
-- Tweet Lambda
-  - diagram
-  - link
+### Authorisation Lambda
+
+- diagram
+- link
+  auth flow (manual initial, refresh token, scopes)
+
+### Twitter-bot Lambda
+
+- diagram
+- link
+
+---
 
 ## Infrastructure
 
 - Terraform
 - Remote State
+
+---
 
 ## Deployment
 
@@ -36,9 +44,13 @@ This bot automates the [@BlackTechJobs][twitter-profile] Twitter page, with the 
   - Obfuscating details, packaging app
 - Github Actions Pipeline
 
+---
+
 ## Testing
 
 - Coverage, mocking, minimums
+
+---
 
 ## Future Improvements
 
