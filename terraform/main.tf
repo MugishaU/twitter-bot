@@ -13,7 +13,7 @@ module "dynamoDB" {
 
 module "eventBridgeRule1" {
   source              = "./modules/eventBridge"
-  query               = "%23BlackInTech apply now -is:retweet"
+  query               = "%23BlackInTech apply -is:retweet"
   function_name       = module.twitter-bot-lambda.name
   lambda-arn          = module.twitter-bot-lambda.arn
   schedule_expression = "cron(00 06 * * ? *)"
@@ -21,7 +21,7 @@ module "eventBridgeRule1" {
 
 module "eventBridgeRule2" {
   source              = "./modules/eventBridge"
-  query               = "%23BlackTechTwitter apply now -is:retweet"
+  query               = "%23BlackTechTwitter apply -is:retweet"
   function_name       = module.twitter-bot-lambda.name
   lambda-arn          = module.twitter-bot-lambda.arn
   schedule_expression = "cron(00 09 * * ? *)"
@@ -29,7 +29,7 @@ module "eventBridgeRule2" {
 
 module "eventBridgeRule3" {
   source              = "./modules/eventBridge"
-  query               = "%23BlackWomenInTech apply now -is:retweet"
+  query               = "%23BlackWomenInTech apply -is:retweet"
   function_name       = module.twitter-bot-lambda.name
   lambda-arn          = module.twitter-bot-lambda.arn
   schedule_expression = "cron(00 12 * * ? *)"
