@@ -16,6 +16,77 @@ The motivation behind this project was to build a full backend system encapsulat
 
 From 06:00 to 21:00 each day the system searches twitter for tweets every three hours that meet the criteria below and retweets them onto the page if they do. Before trying to access the Twitter API the app checks an internal database to see if it has a valid token, if it doesn't then it automatically generates a new one & saves it to the database. After collecting all the tweets that fit the criteria to be retweeted, it checks against an internal database for any tweets it has already retweeted. After retweeting it saves the tweets to the database, to be checked against next time.
 
+[INSERT FULL ARCHITECTURE DIAGRAM HERE]
+
+---
+
+## Architecture & Functionality
+
+### Authorisation Lambda
+
+Before beginning development, I created an application with elevated API access within the Twitter Developer Portal and enabled "Confidential Client" version of OAuth 2.0. This gave me the necessary credentials needed to connect my service with my Twitter account later, and allowed me to set the callback URL, needed for OAuth 2.0.
+
+The authorisation lambda implements the [OAuth 2.0 PKCE (Proof Key for Code Exchange Flow)][pkce]. Twitter provides documentation on how to implement their version of this flow [here][twitter-oauth].
+
+The lambda defines three `GET` API endpoints, served and protected by AWS API Gateway:
+
+- `/authorise`
+- `/token`
+- `/refresh`
+
+`/authorise` generates the necessary `state`, `codeVerifier` and authorisation URL needed to begin the flow. The URL defines the requested permissions scope, the challenge type (SHA256), the code challenge and the callback URL. The `state` and `codeVerifier` are saved to DynamoDB automatically, to be checked against later. Then the user is automatically redirected to the authorisation URL and presents the currently logged in Twitter user an authorisation dialogue box. Once approved, the app redirects the user to the previously configured callback URL, which in this case is `/token`. This endpoint is only called once, the first time authorisation is required. After initial authentication no manual intervention is needed, as the "offline.access" scope is provided, allowing the use refresh tokens instead. This endpoint is protected by built in IAM authorisation, so the URL must be signed with an AWS Signature from a valid role with permissions to invoke this instance of API Gateway, this can be provided via request headers or in the URL itself.
+
+[SECTION IN PROGRESS]
+
+- diagram
+
+  auth endpoints (manual initial, refresh token, scopes)
+  authorisation
+
+[INSERT DETAILED AUTHORISATION LAMBDA DIAGRAM HERE]
+
+- [Application code][auth-app-code]
+- [Infrastructure code][auth-infra-code]
+
+### Twitter-bot Lambda
+
+- diagram
+- link
+- flow (manual start)
+
+---
+
+## Infrastructure
+
+- Terraform
+- Remote State
+
+---
+
+## Continuous Deployment
+
+- Scripts
+  - Obfuscating details, packaging app
+- Github Actions Pipeline
+
+---
+
+## Testing
+
+- Coverage, mocking, minimums
+
+---
+
+## Future Improvements
+
+- tweets
+
+---
+
+## Contributing
+
+- details on how to contribute
+
 [circleci-badge]: https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml/badge.svg?branch=main
 [production-deployment]: https://github.com/MugishaU/twitter-bot/actions/workflows/deploy.yml
 [twitter-api]: https://developer.twitter.com/en/docs/twitter-api
