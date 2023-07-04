@@ -1,6 +1,6 @@
 # twitter-bot
 
-> :warning: Due to Twitter removing free access to it's API, this project has been turned off
+> :warning: Unfortunately due to Twitter removing free access to its API, this project has been turned off. :warning:
 
 [![Production Deployment][circleci-badge]][production-deployment] [![Twitter URL][twitter-badge]][twitter-profile]
 
