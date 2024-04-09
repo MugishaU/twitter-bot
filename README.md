@@ -2,7 +2,7 @@
 
 [![Production Deployment][circleci-badge]][production-deployment] [![Twitter URL][twitter-badge]][twitter-profile]
 
-> :warning: Unfortunately due to Twitter removing free access to its API, this project has been turned off. :warning:
+> :warning: Unfortunately, due to Twitter removing free access to its API, this project has been turned off. :warning:
 
 This bot automates the [@BlackTechJobs][twitter-profile] Twitter page, with the aim of centralising resources for Black people to find opportunities in the tech world. It does this by retweeting tweets that meet specific criteria using the [Twitter API][twitter-api].
 
